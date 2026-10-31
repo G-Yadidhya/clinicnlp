@@ -1,0 +1,6 @@
+{
+  "name": "ClinicaNLP - Healthcare Capstone Research & Symptom Assessment Workbench",
+  "description": "An academic NLP capstone research platform and hybrid conversational symptom assessment assistant featuring clinical safety triage, adaptive questioning, and reproducible benchmark tools.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
