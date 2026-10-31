@@ -1,7 +1,7 @@
 import React from 'react';
-import { MessageSquare, Cpu, Database } from 'lucide-react';
+import { MessageSquare, Stethoscope, BookOpen } from 'lucide-react';
 
-export type TabKey = 'chat' | 'pipeline' | 'knowledge';
+export type TabKey = 'chat' | 'specialists' | 'knowledge';
 
 interface NavigationProps {
   currentTab: TabKey;
@@ -10,9 +10,9 @@ interface NavigationProps {
 
 export const Navigation: React.FC<NavigationProps> = ({ currentTab, onSelectTab }) => {
   const tabs: { id: TabKey; label: string; icon: typeof MessageSquare }[] = [
-    { id: 'chat', label: 'Symptom Chatbot', icon: MessageSquare },
-    { id: 'pipeline', label: 'Pipeline Inspector', icon: Cpu },
-    { id: 'knowledge', label: 'Knowledge Base', icon: Database }
+    { id: 'chat', label: 'Health & Symptom Chat', icon: MessageSquare },
+    { id: 'specialists', label: 'Doctor & Specialist Directory', icon: Stethoscope },
+    { id: 'knowledge', label: 'Disease & Condition Library', icon: BookOpen }
   ];
 
   return (
@@ -29,14 +29,14 @@ export const Navigation: React.FC<NavigationProps> = ({ currentTab, onSelectTab 
               key={tab.id}
               onClick={() => onSelectTab(tab.id)}
               aria-current={isActive ? 'page' : undefined}
-              className={`flex items-center gap-2 px-3.5 py-2.5 text-sm font-medium border-b-2 transition-colors shrink-0 ${
+              className={`flex items-center gap-2 px-4 py-2.5 text-xs sm:text-sm font-semibold border-b-2 transition-colors shrink-0 ${
                 isActive
                   ? 'border-teal-600 text-teal-700'
                   : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300'
               }`}
             >
               <Icon className="w-4 h-4" />
-              {tab.label}
+              <span>{tab.label}</span>
             </button>
           );
         })}

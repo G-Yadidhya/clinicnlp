@@ -542,3 +542,186 @@ export const DETERMINISTIC_TRIAGE_RULES: TriageRule[] = [
     specialQualifier: (profile) => profile?.ageGroup === 'pediatric'
   }
 ];
+
+export interface MedicalSpecialist {
+  id: string;
+  name: string;
+  title: string;
+  category: string;
+  description: string;
+  commonSymptoms: string[];
+  sampleConditions: string[];
+  whenToConsult: string;
+  typicalTests: string[];
+  questionsToAsk: string[];
+  icon: string;
+}
+
+export const MEDICAL_SPECIALISTS: MedicalSpecialist[] = [
+  {
+    id: 'general_practitioner',
+    name: 'Primary Care Physician (GP / Family Doctor)',
+    title: 'General Practitioner & Internal Medicine',
+    category: 'Primary Care',
+    description: 'The first line of defense for non-emergency symptoms, routine health concerns, initial blood work, and holistic medical assessments.',
+    commonSymptoms: ['Mild fever', 'General fatigue', 'Unexplained weight changes', 'Routine cough or cold', 'General body aches', 'Health checkup'],
+    sampleConditions: ['Seasonal viral infection', 'Mild hypertension', 'Vitamin deficiencies', 'Routine bronchitis', 'General fatigue'],
+    whenToConsult: 'Consult first for any new symptom lasting more than a few days, routine screening, or when unsure which specialist you need.',
+    typicalTests: ['Complete blood count (CBC)', 'Metabolic panels', 'Urinalysis', 'Vital signs & physical exam'],
+    questionsToAsk: [
+      'What are the most likely common causes for what I am feeling?',
+      'Do I need diagnostic blood work or imaging?',
+      'Should I be referred to a specialist if symptoms do not improve?'
+    ],
+    icon: 'Stethoscope'
+  },
+  {
+    id: 'ent_specialist',
+    name: 'Otolaryngologist (ENT Specialist)',
+    title: 'Ear, Nose & Throat Specialist',
+    category: 'Surgical & Medical Head/Neck',
+    description: 'Specializes in diseases and conditions affecting the ears, nose, sinuses, throat, vocal cords, and related structures.',
+    commonSymptoms: ['Persistent sore throat', 'Sinus pressure or pain', 'Earache or clogged ears', 'Nasal congestion', 'Difficulty swallowing', 'Hoarse voice'],
+    sampleConditions: ['Sinusitis', 'Strep throat', 'Tonsillitis', 'Allergic rhinitis', 'Ear infection (Otitis media)', 'Vocal strain'],
+    whenToConsult: 'Consult if throat or sinus pain persists over 7 days, if you experience recurrent ear infections, or voice changes lasting weeks.',
+    typicalTests: ['Nasal endoscopy', 'Throat swab culture', 'Audiometry (hearing test)', 'Sinus CT scan'],
+    questionsToAsk: [
+      'Is my throat or sinus inflammation bacterial, viral, or allergic?',
+      'What safe decongestants or nasal sprays do you recommend?',
+      'Could environmental allergens or acid reflux be aggravating my throat?'
+    ],
+    icon: 'Activity'
+  },
+  {
+    id: 'pulmonologist',
+    name: 'Pulmonologist',
+    title: 'Chest & Respiratory Specialist',
+    category: 'Pulmonary Medicine',
+    description: 'Diagnoses and manages acute and chronic conditions of the lungs, bronchial tubes, and respiratory tract.',
+    commonSymptoms: ['Chronic or hacking cough', 'Shortness of breath on exertion', 'Wheezing', 'Chest tightness without heart pain', 'Phlegm production'],
+    sampleConditions: ['Asthma', 'Chronic Bronchitis', 'Pneumonia', 'COPD', 'Post-viral bronchial hyperreactivity'],
+    whenToConsult: 'Consult for a cough lasting more than 3 weeks, unexplained wheezing, or difficulty catching your breath during regular activities.',
+    typicalTests: ['Spirometry / Pulmonary function test', 'Chest X-ray or high-resolution CT', 'Pulse oximetry', 'Fractional exhaled nitric oxide (FeNO)'],
+    questionsToAsk: [
+      'Is my cough related to asthma, bronchial irritation, or allergies?',
+      'Would an inhaler or nebulizer therapy be appropriate?',
+      'Are there specific environmental triggers I should avoid at home?'
+    ],
+    icon: 'Wind'
+  },
+  {
+    id: 'gastroenterologist',
+    name: 'Gastroenterologist',
+    title: 'Digestive & Liver Specialist',
+    category: 'Gastrointestinal Medicine',
+    description: 'Focuses on the digestive system, including the esophagus, stomach, intestines, liver, gallbladder, and pancreas.',
+    commonSymptoms: ['Acid reflux / Heartburn', 'Stomach pain or cramping', 'Persistent nausea', 'Bloating and gas', 'Diarrhea or constipation', 'Indigestion'],
+    sampleConditions: ['GERD (Acid Reflux)', 'Gastritis', 'Irritable Bowel Syndrome (IBS)', 'Food intolerances (lactose, gluten)', 'Peptic ulcer'],
+    whenToConsult: 'Consult for persistent acid reflux, stomach pain after eating, recurrent diarrhea or constipation, or unexplained digestive discomfort.',
+    typicalTests: ['Upper endoscopy (EGD)', 'Abdominal ultrasound', 'Stool antigen tests', 'H. pylori breath test'],
+    questionsToAsk: [
+      'Could my symptoms be managed with dietary adjustments or antacids?',
+      'Is an endoscopy warranted to inspect my stomach lining?',
+      'Could food sensitivities or microbiome imbalance be contributing?'
+    ],
+    icon: 'ShieldAlert'
+  },
+  {
+    id: 'neurologist',
+    name: 'Neurologist',
+    title: 'Brain, Spine & Nerve Specialist',
+    category: 'Neurosciences',
+    description: 'Specializes in diagnosing and treating disorders of the central and peripheral nervous system, including the brain, spinal cord, and nerves.',
+    commonSymptoms: ['Severe or recurring headaches', 'Migraine with light sensitivity', 'Dizziness or balance trouble', 'Numbness or tingling in limbs', 'Nerve pain'],
+    sampleConditions: ['Migraine', 'Tension headache', 'Cluster headache', 'Peripheral neuropathy', 'Vertigo / Vestibular disorders'],
+    whenToConsult: 'Consult when headaches are recurring, throbbing, interfere with daily work, or when you experience unexplained tingling or dizziness.',
+    typicalTests: ['Brain MRI or CT scan', 'Neurological reflex & cranial nerve exam', 'Electromyography (EMG)', 'Vestibular function test'],
+    questionsToAsk: [
+      'What type of headache or migraine pattern do I have?',
+      'What preventive or abortive treatments are safest for me?',
+      'Are there lifestyle or ergonomic triggers I should manage?'
+    ],
+    icon: 'Brain'
+  },
+  {
+    id: 'dermatologist',
+    name: 'Dermatologist',
+    title: 'Skin, Hair & Nail Specialist',
+    category: 'Dermatology',
+    description: 'Expert in the diagnosis and management of diseases affecting the skin, scalp, hair, nails, and cutaneous membranes.',
+    commonSymptoms: ['Skin rash or redness', 'Itching or hives', 'Dry, scaly patches', 'Unusual moles or spots', 'Acne or facial breakouts', 'Hair thinning'],
+    sampleConditions: ['Contact dermatitis', 'Eczema (Atopic dermatitis)', 'Psoriasis', 'Hives (Urticaria)', 'Fungal skin infection'],
+    whenToConsult: 'Consult for rashes that do not improve within a week, spreading itchy patches, or new/changing skin lesions.',
+    typicalTests: ['Skin scraping / KOH prep', 'Patch testing for contact allergies', 'Dermoscopy', 'Skin punch biopsy'],
+    questionsToAsk: [
+      'Is this rash an allergic reaction, infection, or chronic eczema?',
+      'What barrier creams or non-steroidal ointments do you recommend?',
+      'What gentle, fragrance-free skincare products should I switch to?'
+    ],
+    icon: 'Sparkles'
+  },
+  {
+    id: 'cardiologist',
+    name: 'Cardiologist',
+    title: 'Heart & Cardiovascular Specialist',
+    category: 'Cardiology',
+    description: 'Specializes in the prevention, diagnosis, and medical management of diseases affecting the heart and blood vessels.',
+    commonSymptoms: ['Chest tightness or discomfort', 'Heart palpitations / Racing pulse', 'Dizziness when standing up', 'Shortness of breath on exertion', 'Swelling in ankles'],
+    sampleConditions: ['Hypertension', 'Arrhythmia (Palpitations)', 'Coronary artery disease', 'Mild postural tachycardia'],
+    whenToConsult: 'Consult for non-emergency heart palpitations, high blood pressure management, or cardiovascular risk screening. (Note: For sudden, crushing chest pain, call 911 immediately).',
+    typicalTests: ['Electrocardiogram (ECG / EKG)', 'Echocardiogram (Heart Ultrasound)', 'Holter monitor (24-48h tracking)', 'Cardiac stress test'],
+    questionsToAsk: [
+      'Are my palpitations benign, stress-related, or do they indicate an arrhythmia?',
+      'What is my cardiovascular risk profile and target blood pressure?',
+      'What heart-healthy lifestyle changes should I prioritize?'
+    ],
+    icon: 'Heart'
+  },
+  {
+    id: 'orthopedist',
+    name: 'Orthopedic Specialist',
+    title: 'Bones, Joints & Musculoskeletal Specialist',
+    category: 'Orthopedics & Sports Medicine',
+    description: 'Diagnoses and treats injuries and degenerative conditions of bones, joints, ligaments, tendons, and muscles.',
+    commonSymptoms: ['Joint pain (knee, shoulder, hip)', 'Back or neck pain from posture/strain', 'Swelling after activity', 'Limited range of motion', 'Stiffness in the morning'],
+    sampleConditions: ['Osteoarthritis', 'Tendonitis / Bursitis', 'Lumbar strain (Back pain)', 'Rotator cuff irritation', 'Ligament sprain'],
+    whenToConsult: 'Consult if joint or back pain persists over 2 weeks, worsens with movement, or limits normal walking or lifting.',
+    typicalTests: ['X-ray imaging', 'Musculoskeletal MRI or Ultrasound', 'Joint aspiration', 'Range-of-motion physical testing'],
+    questionsToAsk: [
+      'Is my joint pain caused by inflammation, wear-and-tear, or muscle strain?',
+      'Would physical therapy or targeted strengthening exercises help most?',
+      'What ergonomic supports or braces should I use?'
+    ],
+    icon: 'Bone'
+  }
+];
+
+export function findSpecialistForKeywords(text: string): MedicalSpecialist {
+  const lower = text.toLowerCase();
+  
+  if (/ear|nose|throat|sinus|tonsil|voice|hoarse|swallow|snore/i.test(lower)) {
+    return MEDICAL_SPECIALISTS.find(s => s.id === 'ent_specialist')!;
+  }
+  if (/cough|phlegm|wheez|breath|lung|bronch/i.test(lower)) {
+    return MEDICAL_SPECIALISTS.find(s => s.id === 'pulmonologist')!;
+  }
+  if (/stomach|digest|acid|reflux|heartburn|nausea|vomit|diarrhea|constipat|gut|bowel|cramp/i.test(lower)) {
+    return MEDICAL_SPECIALISTS.find(s => s.id === 'gastroenterologist')!;
+  }
+  if (/headache|migraine|tingl|numb|dizz|vertigo|nerve|seiz/i.test(lower)) {
+    return MEDICAL_SPECIALISTS.find(s => s.id === 'neurologist')!;
+  }
+  if (/skin|rash|itch|hive|acne|mole|eczema|scab|scalp/i.test(lower)) {
+    return MEDICAL_SPECIALISTS.find(s => s.id === 'dermatologist')!;
+  }
+  if (/heart|palpitat|chest tight|blood pressure|pulse|cardio/i.test(lower)) {
+    return MEDICAL_SPECIALISTS.find(s => s.id === 'cardiologist')!;
+  }
+  if (/joint|knee|bone|shoulder|back pain|spine|muscle strain|sprain/i.test(lower)) {
+    return MEDICAL_SPECIALISTS.find(s => s.id === 'orthopedist')!;
+  }
+
+  // Default to General Practitioner
+  return MEDICAL_SPECIALISTS.find(s => s.id === 'general_practitioner')!;
+}
+
