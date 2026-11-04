@@ -95,7 +95,7 @@ async function startServer() {
   }
 
   app.listen(port, '0.0.0.0', () => {
-    console.log(`ClinicaNLP full-stack server running on http://0.0.0.0:${port}`);
+    console.log(`CliniQ full-stack server running on http://0.0.0.0:${port}`);
   });
 }
 

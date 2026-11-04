@@ -18,9 +18,9 @@ export const Navigation: React.FC<NavigationProps> = ({ currentTab, onSelectTab 
   return (
     <nav
       aria-label="Main sections"
-      className="bg-white border-b border-slate-200 px-4 lg:px-8"
+      className="bg-white border-b border-slate-200 px-4 sm:px-6 lg:px-8"
     >
-      <div className="max-w-6xl mx-auto flex gap-1 overflow-x-auto">
+      <div className="w-full flex gap-1 overflow-x-auto">
         {tabs.map(tab => {
           const Icon = tab.icon;
           const isActive = currentTab === tab.id;

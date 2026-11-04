@@ -20,8 +20,11 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col">
-      <Header />
-      <Navigation currentTab={currentTab} onSelectTab={setCurrentTab} />
+      {/* Pinned Top Navigation Bar - Stays fixed and never moves */}
+      <div className="sticky top-0 z-40 bg-white shadow-xs">
+        <Header />
+        <Navigation currentTab={currentTab} onSelectTab={setCurrentTab} />
+      </div>
 
       <main className="flex-1">
         {currentTab === 'chat' && (
@@ -39,7 +42,7 @@ export default function App() {
       </main>
 
       <footer className="border-t border-slate-200 bg-white py-4 px-6 text-center text-xs text-slate-500">
-        <p>ClinicaNLP · Health Information & Specialist Referral Assistant · For educational guidance, not emergency use</p>
+        <p>CliniQ · Health Information & Specialist Referral Assistant · For educational guidance, not emergency use</p>
       </footer>
     </div>
   );

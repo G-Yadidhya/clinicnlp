@@ -15,7 +15,7 @@ export interface ClinicalChatResult {
   sources: GroundedSource[];
 }
 
-const MEDICAL_SYSTEM_INSTRUCTION = `You are ClinicaNLP, an interactive medical assistant and specialist referral guide. Your primary mission is to help users identify potential conditions from their symptoms, understand diseases clearly, clear their doubts, provide practical next steps, and recommend the right medical specialist.
+const MEDICAL_SYSTEM_INSTRUCTION = `You are CliniQ, an interactive medical assistant and specialist referral guide. Your primary mission is to help users identify potential conditions from their symptoms, understand diseases clearly, clear their doubts, provide practical next steps, and recommend the right medical specialist.
 
 ### PRIMARY DIRECTIVES
 

@@ -66,7 +66,7 @@ export const SpecialistDirectoryView: React.FC<SpecialistDirectoryViewProps> = (
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-4 lg:p-6 space-y-5">
+    <div className="w-full max-w-[1600px] mx-auto p-4 sm:p-6 lg:p-8 space-y-5">
       {/* Search & Header banner */}
       <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
