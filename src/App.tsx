@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Header } from './components/Header';
 import { Navigation, TabKey } from './components/Navigation';
+import { Sidebar } from './components/Sidebar';
 import { ChatInterface } from './components/Chatbot/ChatInterface';
 import { SpecialistDirectoryView } from './components/SpecialistDirectory/SpecialistDirectoryView';
 import { DiseaseExplorerView } from './components/DiseaseExplorer/DiseaseExplorerView';
@@ -8,6 +9,8 @@ import { DiseaseExplorerView } from './components/DiseaseExplorer/DiseaseExplore
 export default function App() {
   const [currentTab, setCurrentTab] = useState<TabKey>('chat');
   const [chatInitialQuery, setChatInitialQuery] = useState<string | undefined>(undefined);
+  const [resetTrigger, setResetTrigger] = useState<number>(0);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const handleNavigateToSpecialist = (specialistId?: string) => {
     setCurrentTab('specialists');
@@ -18,32 +21,58 @@ export default function App() {
     setCurrentTab('chat');
   };
 
+  const handleNewConsultation = () => {
+    setCurrentTab('chat');
+    setChatInitialQuery(undefined);
+    setResetTrigger(prev => prev + 1);
+  };
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(prev => !prev);
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col">
       {/* Pinned Top Navigation Bar - Stays fixed and never moves */}
       <div className="sticky top-0 z-40 bg-white shadow-xs">
-        <Header />
+        <Header onToggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
         <Navigation currentTab={currentTab} onSelectTab={setCurrentTab} />
       </div>
 
-      <main className="flex-1">
-        {currentTab === 'chat' && (
-          <ChatInterface
-            onNavigateToSpecialist={handleNavigateToSpecialist}
-            initialQuery={chatInitialQuery}
-          />
-        )}
-        {currentTab === 'specialists' && (
-          <SpecialistDirectoryView onSelectForChat={handleSelectForChat} />
-        )}
-        {currentTab === 'knowledge' && (
-          <DiseaseExplorerView onSelectForChat={handleSelectForChat} />
-        )}
-      </main>
+      <div className="flex-1 flex w-full">
+        {/* Full-Screen Left Sidebar */}
+        <Sidebar
+          currentTab={currentTab}
+          onSelectTab={setCurrentTab}
+          onNewConsultation={handleNewConsultation}
+          onSelectStarterQuery={handleSelectForChat}
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
+        />
 
-      <footer className="border-t border-slate-200 bg-white py-4 px-6 text-center text-xs text-slate-500">
-        <p>CliniQ · Health Information & Specialist Referral Assistant · For educational guidance, not emergency use</p>
-      </footer>
+        {/* Main Content Area */}
+        <div className="flex-1 flex flex-col min-w-0">
+          <main className="flex-1">
+            {currentTab === 'chat' && (
+              <ChatInterface
+                onNavigateToSpecialist={handleNavigateToSpecialist}
+                initialQuery={chatInitialQuery}
+                resetTrigger={resetTrigger}
+              />
+            )}
+            {currentTab === 'specialists' && (
+              <SpecialistDirectoryView onSelectForChat={handleSelectForChat} />
+            )}
+            {currentTab === 'knowledge' && (
+              <DiseaseExplorerView onSelectForChat={handleSelectForChat} />
+            )}
+          </main>
+
+          <footer className="border-t border-slate-200 bg-white py-4 px-6 text-center text-xs text-slate-500">
+            <p>CliniQ · Health Information & Specialist Referral Assistant · For educational guidance, not emergency use</p>
+          </footer>
+        </div>
+      </div>
     </div>
   );
 }

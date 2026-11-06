@@ -36,6 +36,7 @@ interface Message {
 interface ChatInterfaceProps {
   onNavigateToSpecialist?: (specialistId?: string) => void;
   initialQuery?: string;
+  resetTrigger?: number;
 }
 
 let messageCounter = 0;
@@ -352,7 +353,11 @@ function parseInlineBold(text: string): React.ReactNode {
   });
 }
 
-export const ChatInterface: React.FC<ChatInterfaceProps> = ({ onNavigateToSpecialist, initialQuery }) => {
+export const ChatInterface: React.FC<ChatInterfaceProps> = ({
+  onNavigateToSpecialist,
+  initialQuery,
+  resetTrigger
+}) => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 'msg_welcome',
@@ -368,6 +373,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ onNavigateToSpecia
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
   const [editingText, setEditingText] = useState('');
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const isFirstMount = useRef(true);
 
   const samplePrompts = [
     {
@@ -410,6 +416,16 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ onNavigateToSpecia
       handleSendMessage(initialQuery);
     }
   }, [initialQuery]);
+
+  useEffect(() => {
+    if (isFirstMount.current) {
+      isFirstMount.current = false;
+      return;
+    }
+    if (resetTrigger) {
+      handleReset();
+    }
+  }, [resetTrigger]);
 
   const handleSendMessage = async (textToSend?: string) => {
     const raw = (textToSend || inputText).trim();
@@ -622,11 +638,15 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ onNavigateToSpecia
     setIsSending(false);
   };
 
+  const [isGuidanceOpen, setIsGuidanceOpen] = useState(false);
+
   return (
-    <div className="w-full max-w-[1600px] mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-      {/* Left Chat Window */}
+    <div className="w-full max-w-[1700px] mx-auto p-3 sm:p-5 lg:p-6 grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+      {/* Left Chat Window - Occupies dominant area */}
       <section
-        className="lg:col-span-8 flex flex-col h-[calc(100vh-13rem)] min-h-[500px] max-h-[850px] bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden"
+        className={`${
+          isGuidanceOpen ? 'lg:col-span-8 xl:col-span-9' : 'lg:col-span-12'
+        } flex flex-col h-[calc(100vh-12rem)] min-h-[580px] max-h-[920px] bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden transition-all duration-200`}
         aria-label="Health and symptom chat"
       >
         {/* Header */}
@@ -646,14 +666,32 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ onNavigateToSpecia
             </div>
           </div>
 
-          <button
-            onClick={handleReset}
-            className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition"
-            title="Start new conversation"
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-            <span>New Chat</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setIsGuidanceOpen(prev => !prev)}
+              className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1.5 rounded-lg border transition ${
+                isGuidanceOpen
+                  ? 'border-teal-300 bg-teal-50 text-teal-800'
+                  : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
+              }`}
+              title="Toggle Clinical Guidance Panel"
+            >
+              <UserCheck className="w-3.5 h-3.5 text-teal-600" />
+              <span>{isGuidanceOpen ? 'Hide Guidance' : 'Clinical Guidance'}</span>
+              {activeSpecialist && (
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              )}
+            </button>
+
+            <button
+              onClick={handleReset}
+              className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition"
+              title="Start new conversation"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>New Chat</span>
+            </button>
+          </div>
         </div>
 
         {/* Quick prompt suggestions */}
@@ -862,10 +900,11 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ onNavigateToSpecia
         </div>
       </section>
 
-      {/* Right Guidance Sidebar - Pinned */}
-      <aside className="lg:col-span-4 space-y-4 lg:sticky lg:top-[9rem]" aria-label="Clinical guidance and specialist summary">
-        {/* Recommended Specialist Card — ONLY shown if relatable symptoms or conditions have been discussed */}
-        {activeSpecialist ? (
+      {/* Right Guidance Sidebar - Only displayed when toggled open */}
+      {isGuidanceOpen && (
+        <aside className="lg:col-span-4 xl:col-span-3 space-y-4 lg:sticky lg:top-[9rem]" aria-label="Clinical guidance and specialist summary">
+          {/* Recommended Specialist Card — ONLY shown if relatable symptoms or conditions have been discussed */}
+          {activeSpecialist ? (
           <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-3">
             <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-400">
               <UserCheck className="w-4 h-4 text-teal-600" />
@@ -945,18 +984,8 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ onNavigateToSpecia
             </li>
           </ul>
         </div>
-
-        {/* Reassuring Philosophy Banner */}
-        <div className="bg-emerald-50/70 border border-emerald-200 rounded-2xl p-4 text-xs text-emerald-900 space-y-1.5">
-          <div className="font-semibold flex items-center gap-1.5 text-emerald-950">
-            <ShieldCheck className="w-4 h-4 text-emerald-700 shrink-0" />
-            <span>Calm & Non-Alarmist Care</span>
-          </div>
-          <p className="text-[11px] text-emerald-800 leading-relaxed">
-            We prioritize common everyday causes and strictly avoid jumping to scary life-threatening conclusions for simple symptoms. Clarifying doubts is answered educational without unnecessary doctor referrals.
-          </p>
-        </div>
       </aside>
+      )}
     </div>
   );
 };

@@ -460,6 +460,740 @@ export const CLINICAL_DISEASE_DB: ClinicalDisease[] = [
     citations: [
       { source: 'American Thoracic Society / IDSA Guideline on CAP', description: 'Diagnostic criteria, CURB-65 severity scoring, and outpatient vs inpatient decision trees.' }
     ]
+  },
+  {
+    id: 'dengue_fever',
+    name: 'Dengue Fever (Breakbone Fever)',
+    icd10: 'A90',
+    category: 'Vector-Borne Viral Infection',
+    urgency: 'URGENT',
+    summary: 'A mosquito-borne tropical viral disease transmitted by Aedes mosquitoes, causing sudden high fever, retro-orbital eye pain, severe joint and muscle pains, and potential thrombocytopenia (low platelets).',
+    symptomWeights: {
+      fever: 0.98,
+      body_aches: 0.95,
+      headache: 0.90,
+      fatigue: 0.85,
+      nausea_vomiting: 0.65,
+      rash: 0.55
+    },
+    coreSymptomIds: ['fever', 'body_aches', 'headache'],
+    redFlags: [
+      'Severe abdominal pain or tenderness',
+      'Persistent vomiting (≥3 episodes in 24 hours)',
+      'Mucosal bleeding (bleeding gums, nosebleeds, blood in stool or vomit)',
+      'Lethargy, extreme restlessness, or fluid accumulation',
+      'Rapid drop in platelet count with rising hematocrit'
+    ],
+    causes: ['Dengue virus serotypes (DENV-1, 2, 3, 4) transmitted through the bite of infected Aedes aegypti or Aedes albopictus mosquitoes.'],
+    riskFactors: ['Living in or traveling to tropical or subtropical regions', 'Secondary infection with a different dengue serotype (increased risk of Severe Dengue)'],
+    howDiagnosed: [
+      'Dengue NS1 antigen test (detectable within days 1-5 of symptom onset)',
+      'Dengue IgM/IgG antibody ELISA / Rapid Test (typically positive after day 4-5)',
+      'Serial Complete Blood Count (CBC) monitoring hematocrit and platelet counts'
+    ],
+    generalTreatments: [
+      'Oral or intravenous hydration with balanced electrolytes (ORS, fluids) — the cornerstone of recovery',
+      'Acetaminophen / Paracetamol for fever and body ache management',
+      'CRITICAL: STRICTLY AVOID NSAIDs (Ibuprofen, Aspirin, Naproxen) as they worsen bleeding risk and antiplatelet effects',
+      'Rest and careful observation during the critical phase (days 3–7 as fever drops)'
+    ],
+    prevention: ['Mosquito bite prevention (DEET repellents, bed nets, long clothing)', 'Eliminating standing water containers around homes', 'Dengue vaccination in endemic regions for eligible populations'],
+    citations: [
+      { source: 'WHO Dengue Guidelines for Diagnosis, Treatment, Prevention and Control', description: 'Global warning signs, clinical phases (febrile, critical, recovery), and fluid algorithms.' },
+      { source: 'CDC Dengue Clinical Management', description: 'Diagnostic testing timelines and warning signs of severe dengue.' }
+    ]
+  },
+  {
+    id: 'malaria',
+    name: 'Malaria (Plasmodium Infection)',
+    icd10: 'B54',
+    category: 'Parasitic Vector-Borne Infection',
+    urgency: 'URGENT',
+    summary: 'A life-threatening parasitic blood infection caused by Plasmodium parasites transmitted by female Anopheles mosquitoes, characterized by cyclical high fevers, shaking chills, and profuse sweating.',
+    symptomWeights: {
+      fever: 0.98,
+      body_aches: 0.90,
+      headache: 0.85,
+      fatigue: 0.90,
+      nausea_vomiting: 0.60
+    },
+    coreSymptomIds: ['fever', 'body_aches', 'fatigue'],
+    redFlags: [
+      'Impaired consciousness, coma, or seizures (Cerebral Malaria)',
+      'Severe anemia or jaundice (yellow eyes/skin)',
+      'Difficulty breathing or pulmonary edema',
+      'Hemoglobinuria (dark or black tea-colored urine)',
+      'Spontaneous bleeding or circulatory shock'
+    ],
+    causes: ['Plasmodium falciparum, Plasmodium vivax, Plasmodium ovale, or Plasmodium malariae parasites injected via mosquito saliva into the bloodstream.'],
+    riskFactors: ['Travel to malaria-endemic regions (Sub-Saharan Africa, South Asia, parts of South America)', 'Lack of chemoprophylaxis'],
+    howDiagnosed: [
+      'Microscopic examination of Giemsa-stained thick and thin blood smears (gold standard)',
+      'Malaria Rapid Diagnostic Test (RDT) detecting Plasmodium antigens (HRP-2 / pLDH)'
+    ],
+    generalTreatments: [
+      'Physician-prescribed Artemisinin-based Combination Therapies (ACTs) such as artemether-lumefantrine',
+      'Intravenous artesunate for complicated or severe malaria in hospital settings',
+      'Primaquine or tafenoquine for liver hypnozoite eradication in P. vivax / P. ovale'
+    ],
+    prevention: ['Insecticide-treated bed nets', 'Indoor residual spraying', 'Prescription travel chemoprophylaxis (atovaquone-proguanil, doxycycline, or mefloquine)'],
+    citations: [
+      { source: 'WHO Guidelines for Malaria', description: 'Evidence-based recommendations on ACT regimens and management of severe malaria.' },
+      { source: 'CDC Malaria Diagnosis and Treatment Guidelines', description: 'Microscopy and emergency treatment protocols.' }
+    ]
+  },
+  {
+    id: 'typhoid_fever',
+    name: 'Typhoid Fever (Enteric Fever)',
+    icd10: 'A01.0',
+    category: 'Systemic Bacterial Infection',
+    urgency: 'URGENT',
+    summary: 'A systemic bacterial illness caused by Salmonella enterica serotype Typhi, presenting with step-ladder prolonged fever, severe fatigue, abdominal discomfort, and headache.',
+    symptomWeights: {
+      fever: 0.96,
+      headache: 0.85,
+      fatigue: 0.90,
+      body_aches: 0.70,
+      nausea_vomiting: 0.50,
+      diarrhea: 0.45
+    },
+    coreSymptomIds: ['fever', 'headache', 'fatigue'],
+    redFlags: [
+      'Intestinal perforation or massive gastrointestinal hemorrhage',
+      'Extreme delirium or typhoid state (muttering stupor)',
+      'Hypotension and septic shock',
+      'Persistent vomiting preventing oral medication'
+    ],
+    causes: ['Ingestion of food or water contaminated with Salmonella enterica serovar Typhi from human carriers.'],
+    riskFactors: ['Travel to areas with poor sanitation', 'Consuming untreated street food or non-potable ice/water'],
+    howDiagnosed: [
+      'Blood culture (most sensitive in week 1-2)',
+      'Stool and bone marrow culture',
+      'Widal or Typhidot serological assays (interpreted alongside clinical presentation)'
+    ],
+    generalTreatments: [
+      'Physician-prescribed targeted antibiotics (such as azithromycin, ceftriaxone, or ciprofloxacin based on regional resistance patterns)',
+      'Adequate oral rehydration and easily digestible nutrition'
+    ],
+    prevention: ['Typhoid conjugate vaccine (TCV) before travel', 'Drinking boiled or bottled water', 'Thorough handwashing and eating freshly cooked piping-hot foods'],
+    citations: [
+      { source: 'WHO Typhoid Fact Sheet & TCV Position Paper', description: 'Global disease burden, diagnostic considerations, and vaccination schedules.' }
+    ]
+  },
+  {
+    id: 'tension_headache',
+    name: 'Tension-Type Headache (TTH)',
+    icd10: 'G44.2',
+    category: 'Neurological / Primary Headache',
+    urgency: 'ROUTINE',
+    summary: 'The most common form of primary headache, described as a dull, non-pulsatile band-like pressure or tightness around the forehead, temples, or back of the neck without nausea.',
+    symptomWeights: {
+      headache: 0.99,
+      fatigue: 0.45,
+      photophobia: 0.15,
+      stiff_neck: 0.40
+    },
+    coreSymptomIds: ['headache'],
+    redFlags: [
+      'Sudden thunderclap onset (worst headache of life in seconds)',
+      'Headache with fever and neck stiffness (meningism)',
+      'New neurological focal signs (weakness, numbness, speech changes)',
+      'New onset in individuals older than 50 years'
+    ],
+    causes: ['Myofascial trigger points, sustained contraction of pericranial and cervical muscles, mental stress, eye strain, and poor workstation posture.'],
+    riskFactors: ['High stress, lack of sleep, extended screen time, dehydration, anxiety, neck strain'],
+    howDiagnosed: ['Clinical criteria according to ICHD-3: Bilateral location, pressing/tightening non-throbbing quality, mild-to-moderate intensity, not aggravated by routine physical activity.'],
+    generalTreatments: [
+      'Over-the-counter pain relief (acetaminophen, ibuprofen) used sparingly to avoid medication-overuse headaches',
+      'Warm neck compresses, gentle cervical stretches, and massage',
+      'Stress management, regular sleep, and ergonomic desk adjustments'
+    ],
+    prevention: ['Regular exercise, routine hydration, taking scheduled screen breaks (20-20-20 rule), posture correction'],
+    citations: [
+      { source: 'International Headache Society (IHS) ICHD-3', description: 'Diagnostic criteria for episodic and chronic tension-type headaches.' }
+    ]
+  },
+  {
+    id: 'acute_sinusitis',
+    name: 'Acute Rhinosinusitis (Sinus Infection)',
+    icd10: 'J01.9',
+    category: 'Ear, Nose & Throat (ENT)',
+    urgency: 'ROUTINE',
+    summary: 'Inflammation of the mucosal lining of the nasal passages and paranasal sinuses, typically developing after a viral common cold and causing facial pressure, nasal obstruction, and discolored discharge.',
+    symptomWeights: {
+      headache: 0.85,
+      fever: 0.40,
+      fatigue: 0.60,
+      cough: 0.50,
+      sore_throat: 0.45
+    },
+    coreSymptomIds: ['headache', 'cough'],
+    redFlags: [
+      'Periorbital swelling, redness, or pain around the eyes (orbital cellulitis risk)',
+      'Double vision (diplopia) or reduced visual acuity',
+      'Severe frontal headache with high fever and neck stiffness'
+    ],
+    causes: ['Secondary bacterial proliferation (Streptococcus pneumoniae, Haemophilus influenzae) or prolonged mucosal swelling following viral rhinitis.'],
+    riskFactors: ['Allergic rhinitis, deviated nasal septum, smoking exposure, dental infections'],
+    howDiagnosed: ['Clinical examination based on symptoms lasting >10 days without improvement, or "double sickening" (worsening after initial recovery).'],
+    generalTreatments: [
+      'Isotonic nasal saline rinses (neti pot or spray) to flush sinuses',
+      'Intranasal corticosteroid sprays (e.g., fluticasone)',
+      'Pain relievers for facial pressure',
+      'Physician-prescribed antibiotics only if bacterial symptoms persist >10 days or worsen severely'
+    ],
+    prevention: ['Managing seasonal allergies, using a room humidifier, avoiding cigarette smoke'],
+    citations: [
+      { source: 'American Academy of Otolaryngology-Head and Neck Surgery (AAO-HNS)', description: 'Clinical Practice Guideline: Adult Sinusitis.' }
+    ]
+  },
+  {
+    id: 'strep_throat',
+    name: 'Streptococcal Pharyngitis (Strep Throat)',
+    icd10: 'J02.0',
+    category: 'Ear, Nose & Throat (ENT)',
+    urgency: 'ROUTINE',
+    summary: 'A bacterial throat infection caused by Group A Streptococcus (GAS), distinguished by severe sudden sore throat, fever, tonsillar exudate, and tender cervical lymph nodes without cough.',
+    symptomWeights: {
+      sore_throat: 0.98,
+      fever: 0.85,
+      headache: 0.65,
+      body_aches: 0.55,
+      fatigue: 0.70
+    },
+    coreSymptomIds: ['sore_throat', 'fever'],
+    redFlags: [
+      'Inability to swallow saliva / drooling (quinsy or peritonsillar abscess)',
+      'Stridor or difficulty breathing',
+      'Inability to open mouth fully (trismus)',
+      'Sandpaper-like scarlet fever rash'
+    ],
+    causes: ['Group A Streptococcus (Streptococcus pyogenes) transmitted through respiratory droplets or shared drinks.'],
+    riskFactors: ['School-age children (5-15 years) and parents, crowded indoor settings'],
+    howDiagnosed: [
+      'Centor / McIsaac Clinical Scoring Criteria',
+      'Rapid Antigen Detection Test (RADT) throat swab',
+      'Throat culture for confirmation'
+    ],
+    generalTreatments: [
+      'Physician-prescribed oral penicillin or amoxicillin (or cephalosporin/macrolide if penicillin-allergic) to prevent acute rheumatic fever',
+      'Warm saltwater gargles and throat lozenges',
+      'Acetaminophen or ibuprofen for pain relief'
+    ],
+    prevention: ['Prompt treatment of infected individuals', 'Replacing toothbrush 24h after starting antibiotics', 'Hand hygiene'],
+    citations: [
+      { source: 'Infectious Diseases Society of America (IDSA)', description: 'Clinical Practice Guideline for the Diagnosis and Management of Group A Streptococcal Pharyngitis.' }
+    ]
+  },
+  {
+    id: 'gerd',
+    name: 'Gastroesophageal Reflux Disease (GERD / Acid Reflux)',
+    icd10: 'K21.9',
+    category: 'Gastrointestinal Medicine',
+    urgency: 'ROUTINE',
+    summary: 'A chronic digestive disorder where stomach acid or bile irritates the esophageal food pipe lining, producing retrosternal burning (heartburn), regurgitation, and sour taste.',
+    symptomWeights: {
+      chest_pain: 0.65,
+      cough: 0.40,
+      nausea_vomiting: 0.35,
+      sore_throat: 0.35
+    },
+    coreSymptomIds: ['chest_pain'],
+    redFlags: [
+      'Progressive difficulty swallowing solid foods (dysphagia)',
+      'Painful swallowing (odynophagia)',
+      'Unexplained weight loss or recurrent vomiting with blood',
+      'Symptoms mimicking acute heart attack (sudden crushing chest pain radiating to left arm/jaw requires immediate 911)'
+    ],
+    causes: ['Transient lower esophageal sphincter (LES) relaxations, hiatal hernia, delayed gastric emptying.'],
+    riskFactors: ['Obesity, pregnancy, smoking, eating large or fatty meals, lying down immediately after dining, caffeine, chocolate, citrus, spicy foods'],
+    howDiagnosed: ['Clinical response to lifestyle modifications and empiric acid suppression', 'Upper endoscopy (EGD) if red flag alarm features exist', '24-hour esophageal pH monitoring'],
+    generalTreatments: [
+      'Dietary adjustments: avoid eating within 3 hours of bedtime, elevate head of bed by 6 inches',
+      'Over-the-counter antacids or H2 blockers for occasional symptoms',
+      'Physician-prescribed Proton Pump Inhibitors (PPIs) for erosive esophagitis'
+    ],
+    prevention: ['Maintaining healthy weight, smoking cessation, eating smaller frequent meals'],
+    citations: [
+      { source: 'American College of Gastroenterology (ACG)', description: 'Guidelines for the Diagnosis and Management of Gastroesophageal Reflux Disease.' }
+    ]
+  },
+  {
+    id: 'bronchial_asthma',
+    name: 'Bronchial Asthma (Exacerbation / Chronic)',
+    icd10: 'J45.9',
+    category: 'Pulmonary Medicine',
+    urgency: 'ROUTINE',
+    summary: 'A chronic inflammatory disorder of the airways characterized by variable and recurring episodes of wheezing, shortness of breath, chest tightness, and nighttime or early morning cough.',
+    symptomWeights: {
+      wheezing: 0.95,
+      shortness_of_breath: 0.90,
+      cough: 0.85,
+      fatigue: 0.60
+    },
+    coreSymptomIds: ['wheezing', 'shortness_of_breath', 'cough'],
+    redFlags: [
+      'Inability to speak in full sentences without pausing for breath',
+      'Silent chest (absence of wheezing due to severe airflow limitation)',
+      'Cyanosis (blue lips or nail beds)',
+      'Peak flow meter reading < 50% personal best or lack of response to rescue inhaler',
+      'Accessory muscle use (intercostal retractions)'
+    ],
+    causes: ['Airway hyperresponsiveness and chronic eosinophilic or neutrophilic mucosal inflammation triggered by allergens, exercise, cold air, or viral infections.'],
+    riskFactors: ['Atopy (allergies, eczema), family history of asthma, childhood viral respiratory infections, air pollution'],
+    howDiagnosed: ['Spirometry demonstrating reversible airflow obstruction after bronchodilator inhalation', 'Peak expiratory flow (PEF) variability'],
+    generalTreatments: [
+      'Inhaled corticosteroids (ICS) controller therapy (e.g., budesonide, fluticasone)',
+      'Rapid-acting beta-2 agonist (SABA like albuterol) rescue inhaler',
+      'Written Asthma Action Plan formulated with your pulmonologist or GP'
+    ],
+    prevention: ['Identifying and minimizing personal allergens (dust mites, pet dander, mold)', 'Annual influenza and pneumococcal vaccination'],
+    citations: [
+      { source: 'Global Initiative for Asthma (GINA)', description: 'Global Strategy for Asthma Management and Prevention.' }
+    ]
+  },
+  {
+    id: 'osteoarthritis',
+    name: 'Osteoarthritis (Degenerative Joint Disease)',
+    icd10: 'M19.9',
+    category: 'Orthopedics & Rheumatology',
+    urgency: 'ROUTINE',
+    summary: 'The most prevalent form of arthritis, caused by gradual breakdown of joint cartilage and underlying bone, typically affecting knees, hips, hands, and lower spine.',
+    symptomWeights: {
+      body_aches: 0.90,
+      fatigue: 0.40
+    },
+    coreSymptomIds: ['body_aches'],
+    redFlags: [
+      'Hot, severely red, swollen joint with fever (septic arthritis emergency)',
+      'Sudden inability to bear any weight on a joint after a pop or injury',
+      'Rapidly progressing numbness or loss of bladder/bowel control (cauda equina warning in spine)'
+    ],
+    causes: ['Progressive biomechanical cartilage wear-and-tear, low-grade subchondral bone remodeling, and mild synovial inflammation.'],
+    riskFactors: ['Advancing age, obesity, prior joint injuries, female sex, repetitive occupational joint loading'],
+    howDiagnosed: ['Weight-bearing joint X-rays demonstrating joint space narrowing, subchondral sclerosis, and osteophytes', 'Clinical physical exam'],
+    generalTreatments: [
+      'Low-impact physical therapy and quadriceps/gluteal strengthening (swimming, cycling, walking)',
+      'Weight management to decrease compressive joint loads',
+      'Topical NSAID gels (diclofenac) or oral analgesics under physician supervision',
+      'Joint injections or orthopedic joint replacement for advanced severe cartilage loss'
+    ],
+    prevention: ['Maintaining healthy body mass index (BMI)', 'Protecting joints from sports trauma', 'Regular low-impact exercise'],
+    citations: [
+      { source: 'American College of Rheumatology (ACR) / Arthritis Foundation', description: 'Guideline for the Management of Osteoarthritis of the Hand, Hip, and Knee.' }
+    ]
+  },
+  {
+    id: 'atopic_dermatitis_eczema',
+    name: 'Atopic Dermatitis (Eczema) & Contact Dermatitis',
+    icd10: 'L20.9',
+    category: 'Dermatology',
+    urgency: 'ROUTINE',
+    summary: 'A chronic pruritic inflammatory skin condition characterized by defective skin barrier function, intense itching, red dry patches, and lichenification on flexural folds.',
+    symptomWeights: {
+      rash: 0.98,
+      fatigue: 0.30
+    },
+    coreSymptomIds: ['rash'],
+    redFlags: [
+      'Rapidly spreading clusters of painful fluid-filled blisters (Eczema herpeticum emergency)',
+      'Honey-colored crusting or pus indicating secondary bacterial impetiginization',
+      'High fever accompanying sudden skin erythema covering >50% of body surface'
+    ],
+    causes: ['Filaggrin gene mutations, immune dysregulation (Th2 pathway), and environmental triggers disrupting stratum corneum skin moisture.'],
+    riskFactors: ['Personal or family history of atopic triad (asthma, allergic rhinitis, eczema)', 'Cold dry weather, harsh soaps, fragrances'],
+    howDiagnosed: ['Clinical examination based on Hanifin and Rajka criteria; patch testing to differentiate allergic contact dermatitis.'],
+    generalTreatments: [
+      'Frequent application of thick, fragrance-free ceramide-rich emollients (ointments or creams, not watery lotions) within 3 minutes of bathing',
+      'Short-term physician-prescribed topical corticosteroids or calcineurin inhibitors for acute flare-ups',
+      'Oral antihistamines for nighttime itch relief and cotton clothing'
+    ],
+    prevention: ['Lukewarm brief showers, fragrance-free detergents, avoiding wool against bare skin, using room humidifiers in winter'],
+    citations: [
+      { source: 'American Academy of Dermatology (AAD)', description: 'Guidelines of Care for the Management of Atopic Dermatitis.' }
+    ]
+  },
+  {
+    id: 'type2_diabetes',
+    name: 'Type 2 Diabetes Mellitus (Screening & Doubts)',
+    icd10: 'E11.9',
+    category: 'Endocrinology & Primary Care',
+    urgency: 'ROUTINE',
+    summary: 'A metabolic disorder characterized by high blood glucose levels resulting from progressive insulin resistance and relative insulin deficiency, frequently asymptomatic in early stages.',
+    symptomWeights: {
+      fatigue: 0.80,
+      headache: 0.35
+    },
+    coreSymptomIds: ['fatigue'],
+    redFlags: [
+      'Diabetic ketoacidosis (DKA) or hyperosmolar hyperglycemic state (HHS): fruity breath odor, deep rapid breathing, confusion, severe dehydration',
+      'Non-healing foot ulcers with redness or dark discoloration',
+      'Sudden vision blurring or dark floaters'
+    ],
+    causes: ['Combination of genetic susceptibility, peripheral insulin resistance in muscle/liver tissues, and pancreatic beta-cell dysfunction.'],
+    riskFactors: ['Overweight/obesity, physical inactivity, age ≥ 35, family history, gestational diabetes, hypertension or dyslipidemia'],
+    howDiagnosed: [
+      'Hemoglobin A1c (HbA1c) ≥ 6.5%',
+      'Fasting plasma glucose ≥ 126 mg/dL (7.0 mmol/L)',
+      '2-hour oral glucose tolerance test (OGTT) ≥ 200 mg/dL'
+    ],
+    generalTreatments: [
+      'Nutritional counseling focusing on whole foods, fiber, and lower refined carbohydrates',
+      'At least 150 minutes of moderate aerobic exercise weekly plus resistance training',
+      'Physician-prescribed medications (such as metformin, SGLT2 inhibitors, GLP-1 receptor agonists) when indicated'
+    ],
+    prevention: ['Moderate weight loss (5-7% of body weight), routine annual metabolic screening, balanced physical activity'],
+    citations: [
+      { source: 'American Diabetes Association (ADA)', description: 'Standards of Care in Diabetes.' }
+    ]
+  },
+  {
+    id: 'hypertension_doubts',
+    name: 'Essential Hypertension (High Blood Pressure)',
+    icd10: 'I10',
+    category: 'Cardiology & Primary Care',
+    urgency: 'ROUTINE',
+    summary: 'A common chronic cardiovascular condition where systemic arterial pressure is persistently elevated (≥130/80 mmHg), often nicknamed the "silent killer" because it rarely causes symptoms in early stages.',
+    symptomWeights: {
+      headache: 0.40,
+      fatigue: 0.30
+    },
+    coreSymptomIds: ['headache'],
+    redFlags: [
+      'Hypertensive Emergency: Blood pressure > 180/120 mmHg accompanied by chest pain, shortness of breath, severe headache, vision changes, or confusion (requires immediate ER care)',
+      'Sudden neurological weakness or numbness'
+    ],
+    causes: ['Arterial stiffness, renal sodium handling dysregulation, sympathetic overactivity, and genetic factors.'],
+    riskFactors: ['High dietary sodium, lack of physical exercise, obesity, excessive alcohol intake, chronic stress, smoking, family history'],
+    howDiagnosed: ['Properly calibrated in-office resting blood pressure measurements taken on at least 2 separate occasions', '24-hour ambulatory blood pressure monitoring (ABPM)'],
+    generalTreatments: [
+      'DASH (Dietary Approaches to Stop Hypertension) diet low in sodium (<2,300 mg/day)',
+      'Regular cardiovascular exercise (brisk walking, swimming)',
+      'Physician-prescribed antihypertensive medications (ACE inhibitors, ARBs, CCBs, or thiazide diuretics)'
+    ],
+    prevention: ['Maintaining healthy weight, limiting alcohol, stress management, routine blood pressure checks at home'],
+    citations: [
+      { source: 'ACC / AHA High Blood Pressure Clinical Practice Guidelines', description: 'Classification, prevention, detection, and management of high blood pressure in adults.' }
+    ]
+  },
+  {
+    id: 'cancer_awareness_doubts',
+    name: 'Cancer Doubts & Screening Guidance',
+    icd10: 'Z12.9',
+    category: 'Oncology & Preventative Health',
+    urgency: 'ROUTINE',
+    summary: 'Educational guidance for users with health anxiety or concerns about cancer. Clarifies that random everyday symptoms (like headaches, mild fever, or transient aches) are overwhelmingly caused by common benign conditions, while outlining evidence-based screening recommendations.',
+    symptomWeights: {
+      fatigue: 0.50,
+      headache: 0.20
+    },
+    coreSymptomIds: ['fatigue'],
+    redFlags: [
+      'Unexplained, unintentional weight loss (>10 lbs without trying)',
+      'A persistent firm, non-tender lump or mass that is growing',
+      'Persistent hoarseness or difficulty swallowing lasting > 4 weeks',
+      'Unexplained visible bleeding: hemoptysis (blood in sputum), hematuria (blood in urine), or rectal bleeding',
+      'ABCDE skin changes in moles (Asymmetry, Border irregularity, Color variegation, Diameter >6mm, Evolving)'
+    ],
+    causes: ['Accumulation of genetic mutations affecting cellular DNA regulation, influenced by environmental exposures, viral triggers, and lifestyle factors.'],
+    riskFactors: ['Tobacco and alcohol use, persistent HPV or Hepatitis infections, excessive UV sunlight exposure, advanced age, specific inherited gene variants (e.g., BRCA)'],
+    howDiagnosed: [
+      'Evidence-based age-appropriate screening: Mammograms (breast), Colonoscopy / FIT stool tests (colorectal), Pap/HPV tests (cervical), Low-dose CT scans (for heavy long-term smokers)',
+      'Definitive diagnosis requires tissue biopsy and histopathological examination — never symptoms alone'
+    ],
+    generalTreatments: [
+      'Multidisciplinary oncological team care (surgical resection, medical oncology chemotherapy, immunotherapy, targeted therapy, radiation therapy)',
+      'Regular primary care preventive health evaluations'
+    ],
+    prevention: ['Tobacco cessation', 'HPV and Hepatitis B vaccination', 'Sunscreen usage', 'Healthy diet and regular physical activity', 'Adherence to routine screening guidelines'],
+    citations: [
+      { source: 'American Cancer Society (ACS) Screening Guidelines', description: 'Evidence-based early detection guidelines for breast, cervical, colorectal, and lung cancer.' },
+      { source: 'National Cancer Institute (NCI)', description: 'Understanding Cancer series and symptom differentiation.' }
+    ]
+  },
+  {
+    id: 'hemorrhoids',
+    name: 'Hemorrhoids (Piles)',
+    icd10: 'K64.9',
+    category: 'Gastrointestinal & Colorectal Medicine',
+    urgency: 'ROUTINE',
+    summary: 'Swollen and inflamed veins in the rectum and anus (internal or external), commonly caused by straining during bowel movements, chronic constipation, pregnancy, or heavy lifting.',
+    symptomWeights: {
+      body_aches: 0.60
+    },
+    coreSymptomIds: ['body_aches'],
+    redFlags: [
+      'Large amounts of bright or dark red rectal bleeding causing weakness or dizziness',
+      'Severe intractable anal pain with a firm, tender lump (thrombosed external hemorrhoid requiring prompt evaluation)',
+      'Fever, chills, or perianal redness and drainage (suspected perianal abscess or fistula)',
+      'Black, tarry, sticky stools (melena - indicates upper GI bleeding rather than hemorrhoids)'
+    ],
+    causes: ['Elevated intra-abdominal venous pressure from prolonged sitting on the toilet, chronic straining, low dietary fiber, pregnancy, and chronic heavy lifting.'],
+    riskFactors: ['Chronic constipation or diarrhea', 'Low dietary fiber intake', 'Obesity', 'Sedentary occupation with long sitting', 'Aging (weakening of supporting connective tissues)'],
+    howDiagnosed: [
+      'Visual perianal inspection and Digital Rectal Examination (DRE)',
+      'Anoscopy or sigmoidoscopy to inspect internal hemorrhoids and exclude rectal polyps/fissures',
+      'Colonoscopy if age > 45 or family history to rule out colorectal pathology'
+    ],
+    generalTreatments: [
+      'High-fiber nutrition (25–35 grams/day) plus psyllium husk fiber supplements and abundant water (2+ liters/day)',
+      'Warm sitz baths (sitting in plain warm water for 15 minutes, 2–3 times daily)',
+      'Short-term soothing topical witch hazel pads, hydrocortisone/pramoxine ointments (limited to 7 days)',
+      'Stool softeners (docusate sodium) or osmotic laxatives (polyethylene glycol / PEG)',
+      'Outpatient procedures (Rubber Band Ligation, infrared coagulation, or hemorrhoidectomy) for persistent high-grade prolapse'
+    ],
+    prevention: ['Avoid straining or delaying bowel urges', 'Limit time on the toilet bowl (<5 minutes, no phone browsing)', 'Increase dietary fiber and daily hydration', 'Regular physical walking'],
+    citations: [
+      { source: 'American Society of Colon and Rectal Surgeons (ASCRS)', description: 'Clinical Practice Guidelines for the Management of Hemorrhoids.' },
+      { source: 'National Institute of Diabetes and Digestive and Kidney Diseases (NIDDK)', description: 'Hemorrhoids: Symptoms, causes, and conservative home care.' }
+    ]
+  },
+  {
+    id: 'chronic_constipation',
+    name: 'Constipation (Functional & Chronic)',
+    icd10: 'K59.0',
+    category: 'Gastrointestinal Medicine',
+    urgency: 'ROUTINE',
+    summary: 'A very common gastrointestinal condition characterized by infrequent bowel movements (<3 per week), hard, lumpy or dry stools, excessive straining, or a feeling of incomplete rectal evacuation.',
+    symptomWeights: {
+      body_aches: 0.40,
+      nausea_vomiting: 0.30
+    },
+    coreSymptomIds: ['body_aches'],
+    redFlags: [
+      'Unexplained weight loss accompanying bowel changes',
+      'Blood in or on the stool (hematochezia)',
+      'Severe abdominal distension and intractable vomiting (mechanical bowel obstruction emergency)',
+      'New onset of constipation after age 50 without prior history',
+      'Family history of colorectal cancer or inflammatory bowel disease (IBD)'
+    ],
+    causes: ['Slow colonic transit, pelvic floor dyssynergia, low dietary fiber, inadequate fluid intake, sedentary lifestyle, and medications (opioids, iron supplements, calcium channel blockers, anticholinergics).'],
+    riskFactors: ['Advanced age, female sex, low physical mobility, ignoring the urge to defecate, high dairy or processed food diets'],
+    howDiagnosed: [
+      'Rome IV Diagnostic Criteria for Functional Constipation (straining, lumpy/hard stools Bristol Type 1-2, <3 spontaneous movements/week for >3 months)',
+      'Digital rectal exam, metabolic blood panel (checking thyroid TSH, calcium, electrolytes)',
+      'Colonoscopy recommended if alarm signs or age ≥ 45'
+    ],
+    generalTreatments: [
+      'Stepwise dietary fiber increase to 25–30g daily (kiwi, prunes, oats, flaxseed, chia seeds, vegetables)',
+      'Osmotic laxatives as first-line safe therapy (Polyethylene glycol 3350 / MiraLAX)',
+      'Adequate morning hydration with a warm beverage to stimulate the gastrocolic reflex',
+      'Using a footstool (e.g., Squatty Potty) to angle the anorectal canal during evacuation',
+      'Stimulant laxatives (senna, bisacodyl) used intermittently if osmotic laxatives are insufficient'
+    ],
+    prevention: ['Daily morning routine allowing unhurried toilet time', 'Regular aerobic exercise (walking 30 min daily improves gut motility)', 'Consistent high-fiber and fluid intake'],
+    citations: [
+      { source: 'American Gastroenterological Association (AGA)', description: 'Clinical Practice Guideline on the Medical Management of Constipation.' },
+      { source: 'Rome IV Diagnostic Criteria', description: 'Functional Gastrointestinal Disorders - Bowel Disorders.' }
+    ]
+  },
+  {
+    id: 'smallpox_mpox',
+    name: 'Smallpox (Variola) & Mpox (Monkeypox)',
+    icd10: 'B03 / B04',
+    category: 'Infectious Diseases & Virology',
+    urgency: 'URGENT',
+    summary: 'Viral illnesses caused by Orthopoxviruses. Smallpox (Variola virus) was declared globally eradicated by the WHO in 1980 after historic vaccination campaigns. Mpox (formerly Monkeypox) is a related zoonotic orthopoxvirus that causes fever, swollen lymph nodes (lymphadenopathy), and characteristic umbilicated vesicular and pustular skin lesions.',
+    symptomWeights: {
+      fever: 0.95,
+      rash: 0.95,
+      body_aches: 0.85,
+      headache: 0.80,
+      fatigue: 0.85,
+      sore_throat: 0.50
+    },
+    coreSymptomIds: ['fever', 'rash', 'body_aches'],
+    redFlags: [
+      'Lesions near or directly in the eye (corneal ulceration and visual loss risk)',
+      'Severe bacterial superinfection of pox lesions with spreading cellulitis or sepsis',
+      'Difficulty breathing, swallowing, or severe laryngeal edema',
+      'Severe unremitting anorectal or pharyngeal pain preventing oral fluid intake'
+    ],
+    causes: ['Orthopoxvirus family (Variola virus eradicated; Monkeypox virus clade I and clade II transmitted through close physical/skin-to-skin contact, respiratory droplets, or contaminated linens).'],
+    riskFactors: ['Direct close skin-to-skin or sexual contact with someone with active lesions', 'Contact with infected animals or contaminated materials', 'Immunocompromised individuals (e.g., uncontrolled HIV) have higher risk of severe disease'],
+    howDiagnosed: [
+      'Real-time Polymerase Chain Reaction (PCR) swab directly from lesion fluid, crusts, or vigorous swab of lesion base (definitive test)',
+      'Clinical history noting fever, prodrome, prominent lymphadenopathy, and progressive centrifugal rash'
+    ],
+    generalTreatments: [
+      'Isolation until all scab crusts have fallen off and fresh underlying skin has fully formed',
+      'Pain management (topical lidocaine, oral analgesics, sitz baths for genital/anal lesions)',
+      'Antiviral medication (Tecovirimat / TPOXX) prescribed under CDC/WHO protocols for patients with severe disease, ocular involvement, or high risk of complications',
+      'Skin care keeping lesions dry and clean; avoiding scratching to prevent secondary bacterial infection'
+    ],
+    prevention: ['Smallpox/Mpox Vaccines: JYNNEOS (Modified Vaccinia Ankara) 2-dose subcutaneous regimen for at-risk individuals', 'Avoiding close physical contact with symptomatic persons', 'Wearing gloves when handling contaminated bedding'],
+    citations: [
+      { source: 'WHO Global Health Emergency Information on Mpox & Smallpox Eradication', description: 'Surveillance, infection prevention, and historical eradication records.' },
+      { source: 'CDC Guidelines on Mpox Clinical Management', description: 'Testing algorithms, Tecovirimat (TPOXX) indications, and JYNNEOS vaccination.' }
+    ]
+  },
+  {
+    id: 'irritable_bowel_syndrome',
+    name: 'Irritable Bowel Syndrome (IBS)',
+    icd10: 'K58.9',
+    category: 'Gastrointestinal Medicine',
+    urgency: 'ROUTINE',
+    summary: 'A common disorder of gut-brain interaction characterized by recurrent abdominal cramping, bloating, gas, and altered bowel habits (IBS-Constipation, IBS-Diarrhea, or Mixed).',
+    symptomWeights: {
+      diarrhea: 0.70,
+      body_aches: 0.60,
+      nausea_vomiting: 0.40
+    },
+    coreSymptomIds: ['diarrhea'],
+    redFlags: [
+      'Nocturnal diarrhea awakening the patient from sleep (suggests organic disease like IBD rather than IBS)',
+      'Rectal bleeding or unintentional rapid weight loss',
+      'Unexplained iron-deficiency anemia',
+      'Elevated fecal calprotectin or inflammatory markers'
+    ],
+    causes: ['Visceral hypersensitivity, abnormal gut motility, altered gut-brain communication, and post-infectious intestinal microflora alterations.'],
+    riskFactors: ['Prior acute gastroenteritis (post-infectious IBS), chronic psychological stress, anxiety, food intolerances'],
+    howDiagnosed: ['Rome IV criteria: Recurrent abdominal pain at least 1 day per week related to defecation, change in stool frequency or form, for at least 3 months.'],
+    generalTreatments: [
+      'Low-FODMAP diet trial guided by a clinical dietitian to identify fermentable carb triggers',
+      'Soluble fiber (psyllium) rather than insoluble wheat bran',
+      'Antispasmodics (peppermint oil, dicyclomine) for abdominal cramps',
+      'Probiotics and gut-directed hypnotherapy or cognitive behavioral therapy'
+    ],
+    prevention: ['Stress management, regular eating schedules, avoiding carbonated drinks and artificial sweeteners (sorbitol, xylitol)'],
+    citations: [
+      { source: 'American College of Gastroenterology (ACG) IBS Monograph', description: 'Evidence-based management of Irritable Bowel Syndrome.' }
+    ]
+  },
+  {
+    id: 'peptic_ulcer_disease',
+    name: 'Peptic Ulcer Disease (Gastric & Duodenal Ulcers)',
+    icd10: 'K27.9',
+    category: 'Gastrointestinal Medicine',
+    urgency: 'ROUTINE',
+    summary: 'Sores or breaks in the protective mucosal lining of the stomach (gastric) or upper small intestine (duodenal), presenting with burning epigastric stomach pain often worse between meals or at night.',
+    symptomWeights: {
+      chest_pain: 0.70,
+      nausea_vomiting: 0.50
+    },
+    coreSymptomIds: ['chest_pain'],
+    redFlags: [
+      'Vomiting bright red blood or "coffee-ground" emesis (active upper GI bleed)',
+      'Black tarry foul-smelling stools (melena)',
+      'Sudden severe, knife-like, rigid abdominal pain (acute ulcer perforation emergency)'
+    ],
+    causes: ['Helicobacter pylori bacterial infection (60-80% of cases) and frequent use of NSAID pain relievers (aspirin, ibuprofen, naproxen).'],
+    riskFactors: ['H. pylori colonization, regular NSAID use, tobacco smoking, older age, concurrent corticosteroid or anticoagulant use'],
+    howDiagnosed: [
+      'Upper gastrointestinal endoscopy (Esophagogastroduodenoscopy / EGD) with mucosal biopsy',
+      'H. pylori testing (urea breath test, stool antigen test, or endoscopic biopsy)'
+    ],
+    generalTreatments: [
+      'H. pylori eradication regimen (quadruple therapy: bismuth + PPI + two targeted antibiotics)',
+      'Proton Pump Inhibitors (PPIs like omeprazole, pantoprazole) for 4-8 weeks to allow mucosal healing',
+      'Immediate discontinuation of NSAIDs'
+    ],
+    prevention: ['Avoid unprescribed chronic NSAIDs', 'Take NSAIDs with food or a protective PPI if clinically required', 'Smoking cessation'],
+    citations: [
+      { source: 'American College of Gastroenterology (ACG)', description: 'Management of Ulcer Bleeding and H. Pylori Guidelines.' }
+    ]
+  },
+  {
+    id: 'acute_appendicitis',
+    name: 'Acute Appendicitis',
+    icd10: 'K35.8',
+    category: 'Surgical Abdomen & Emergency Medicine',
+    urgency: 'EMERGENCY',
+    summary: 'Acute inflammation of the vermiform appendix, typically beginning as dull periumbilical pain that migrates to the right lower quadrant (McBurney\'s point) with localized guarding, rebound tenderness, and low-grade fever.',
+    symptomWeights: {
+      nausea_vomiting: 0.85,
+      fever: 0.75,
+      body_aches: 0.60
+    },
+    coreSymptomIds: ['nausea_vomiting', 'fever'],
+    redFlags: [
+      'Sudden temporary relief of pain followed by diffuse peritonitis (suggests appendiceal rupture)',
+      'Rigid "board-like" abdominal wall and high fever',
+      'Inability to walk upright due to right lower quadrant pain',
+      'Rapid heart rate and low blood pressure (septic shock)'
+    ],
+    causes: ['Obstruction of the appendiceal lumen by a fecalith (hardened stool), lymphoid hyperplasia, or foreign body, leading to bacterial overgrowth and ischemia.'],
+    riskFactors: ['Most common between ages 10 and 30, though can occur at any age'],
+    howDiagnosed: [
+      'Abdominal ultrasound (preferred in children and pregnancy)',
+      'Contrast-enhanced Abdominal CT scan (high sensitivity in adults)',
+      'Complete blood count (elevated white blood cells with left shift) and inflammatory markers'
+    ],
+    generalTreatments: [
+      'EMERGENCY INPATIENT EVALUATION: Do NOT eat or drink (keep NPO for surgery)',
+      'Surgical laparoscopic or open appendectomy',
+      'Intravenous hydration and broad-spectrum IV antibiotics'
+    ],
+    prevention: ['No established preventive measure; prompt surgical evaluation prevents life-threatening rupture and peritonitis.'],
+    citations: [
+      { source: 'World Society of Emergency Surgery (WSES) Jerusalem Guidelines', description: 'Diagnosis and treatment of acute appendicitis.' }
+    ]
+  },
+  {
+    id: 'allergic_rhinitis',
+    name: 'Allergic Rhinitis (Hay Fever & Environmental Allergies)',
+    icd10: 'J30.9',
+    category: 'Allergy, Immunology & ENT',
+    urgency: 'ROUTINE',
+    summary: 'An IgE-mediated inflammatory response of the nasal mucosa to airborne allergens, resulting in sneezing, nasal congestion, clear rhinorrhea, and itchy watery eyes.',
+    symptomWeights: {
+      fatigue: 0.50,
+      cough: 0.40,
+      sore_throat: 0.35,
+      headache: 0.35
+    },
+    coreSymptomIds: ['cough'],
+    redFlags: [
+      'Associated wheezing, acute shortness of breath, or asthma exacerbation',
+      'Unilateral nasal obstruction or blood-stained discharge',
+      'Facial swelling, severe pain, or vision changes'
+    ],
+    causes: ['Pollen from trees, grasses, weeds (seasonal), or dust mites, mold spores, and pet dander (perennial).'],
+    riskFactors: ['Family history of atopy, asthma, eczema'],
+    howDiagnosed: ['Clinical history linking symptoms to specific allergen exposures, skin prick testing, or allergen-specific serum IgE blood testing.'],
+    generalTreatments: [
+      'Intranasal corticosteroid sprays (e.g., fluticasone, mometasone) — most effective first-line therapy',
+      'Second-generation oral non-drowsy antihistamines (cetirizine, fexofenadine, loratadine)',
+      'Nasal saline irrigation to clear airborne allergens',
+      'Allergen immunotherapy (allergy shots or sublingual tablets) for refractory cases'
+    ],
+    prevention: ['HEPA air filters indoors', 'Keeping windows closed during peak pollen counts', 'Washing bedding in hot water weekly'],
+    citations: [
+      { source: 'American Academy of Otolaryngology-Head and Neck Surgery (AAO-HNS)', description: 'Clinical Practice Guideline: Allergic Rhinitis.' }
+    ]
+  },
+  {
+    id: 'hypothyroidism',
+    name: 'Hypothyroidism (Underactive Thyroid)',
+    icd10: 'E03.9',
+    category: 'Endocrinology & Primary Care',
+    urgency: 'ROUTINE',
+    summary: 'A common endocrine disorder where the thyroid gland produces insufficient thyroid hormone, leading to generalized metabolic slowing, fatigue, cold intolerance, constipation, weight gain, and dry skin.',
+    symptomWeights: {
+      fatigue: 0.95,
+      body_aches: 0.50,
+      headache: 0.30
+    },
+    coreSymptomIds: ['fatigue'],
+    redFlags: [
+      'Myxedema coma (extreme emergency: severe hypothermia, confusion, profound lethargy, and bradycardia)',
+      'Severe shortness of breath or pericardial effusion'
+    ],
+    causes: ['Hashimoto\'s thyroiditis (autoimmune destruction of thyroid tissue), prior radioiodine therapy, thyroid surgery, or iodine deficiency.'],
+    riskFactors: ['Female sex (5-8 times more common than in men), advancing age, personal or family history of autoimmune diseases (Type 1 diabetes, celiac disease)'],
+    howDiagnosed: [
+      'Serum Thyroid Stimulating Hormone (TSH) test (elevated in primary hypothyroidism)',
+      'Free Thyroxine (Free T4) test (low in overt hypothyroidism)',
+      'Thyroid Peroxidase (TPO) antibodies to confirm Hashimoto\'s thyroiditis'
+    ],
+    generalTreatments: [
+      'Physician-prescribed synthetic thyroid hormone replacement (Levothyroxine / T4 taken once daily on an empty stomach with water 30-60 min before breakfast)',
+      'Periodic TSH blood monitoring to optimize dosage'
+    ],
+    prevention: ['Adequate dietary iodine through iodized salt; routine screening in women after age 50 or postpartum'],
+    citations: [
+      { source: 'American Thyroid Association (ATA) / American Association of Clinical Endocrinologists (AACE)', description: 'Clinical Practice Guidelines for Hypothyroidism in Adults.' }
+    ]
   }
 ];
 

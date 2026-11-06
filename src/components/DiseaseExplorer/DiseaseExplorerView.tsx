@@ -10,13 +10,23 @@ export const DiseaseExplorerView: React.FC<DiseaseExplorerViewProps> = ({ onSele
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDiseaseId, setSelectedDiseaseId] = useState<string>(CLINICAL_DISEASE_DB[0].id);
 
-  const filteredDiseases = CLINICAL_DISEASE_DB.filter(d =>
-    d.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    d.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    d.icd10.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const cleanQuery = searchQuery.toLowerCase().trim().replace(/[-_]/g, ' ');
 
-  const activeDisease = CLINICAL_DISEASE_DB.find(d => d.id === selectedDiseaseId) || CLINICAL_DISEASE_DB[0];
+  const filteredDiseases = CLINICAL_DISEASE_DB.filter(d => {
+    if (!cleanQuery) return true;
+    const nameMatch = d.name.toLowerCase().replace(/[-_]/g, ' ').includes(cleanQuery);
+    const categoryMatch = d.category.toLowerCase().includes(cleanQuery);
+    const icdMatch = d.icd10.toLowerCase().includes(cleanQuery);
+    const summaryMatch = d.summary.toLowerCase().includes(cleanQuery);
+    const causesMatch = d.causes.some(c => c.toLowerCase().includes(cleanQuery));
+    const symptomsMatch = d.coreSymptomIds.some(s => s.toLowerCase().includes(cleanQuery));
+    return nameMatch || categoryMatch || icdMatch || summaryMatch || causesMatch || symptomsMatch;
+  });
+
+  const activeDisease =
+    filteredDiseases.find(d => d.id === selectedDiseaseId) ||
+    filteredDiseases[0] ||
+    CLINICAL_DISEASE_DB[0];
 
   const urgencyBadge = (urgency: string): string =>
     urgency === 'EMERGENCY'
@@ -50,10 +60,32 @@ export const DiseaseExplorerView: React.FC<DiseaseExplorerViewProps> = ({ onSele
               <BookOpen className="w-3.5 h-3.5" />
               <span>Medical Knowledge & Doubts Library</span>
             </div>
-            <h2 className="text-xl font-bold text-slate-900">Explore Conditions & Understand Doubts</h2>
+            <h2 className="text-xl font-bold text-slate-900">
+              Explore Conditions & Understand Doubts ({CLINICAL_DISEASE_DB.length} Conditions)
+            </h2>
             <p className="text-xs text-slate-500 mt-0.5">
               Learn about common conditions, typical symptoms, home precautions, and specialist recommendations.
             </p>
+            <div className="flex flex-wrap items-center gap-1.5 mt-2">
+              <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Quick searches:</span>
+              {['Hemorrhoids', 'Constipation', 'Smallpox', 'Dengue', 'Asthma', 'GERD', 'Migraine', 'Diabetes'].map(tag => (
+                <button
+                  key={tag}
+                  onClick={() => setSearchQuery(tag)}
+                  className="px-2 py-0.5 rounded-full text-[11px] bg-slate-100 hover:bg-teal-50 hover:text-teal-700 text-slate-600 border border-slate-200 transition"
+                >
+                  {tag}
+                </button>
+              ))}
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="px-2 py-0.5 rounded-full text-[11px] bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 transition font-medium"
+                >
+                  Clear filter ✕
+                </button>
+              )}
+            </div>
           </div>
 
           <div className="relative w-full md:w-80">
@@ -64,7 +96,7 @@ export const DiseaseExplorerView: React.FC<DiseaseExplorerViewProps> = ({ onSele
               type="text"
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              placeholder="Search by condition or ICD-10…"
+              placeholder={`Search ${CLINICAL_DISEASE_DB.length} conditions, e.g. Hemorrhoids, Constipation, Smallpox…`}
               className="w-full bg-white border border-slate-300 rounded-xl pl-9 pr-4 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition"
             />
           </div>
