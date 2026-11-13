@@ -8,6 +8,7 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { TabKey } from './Navigation';
+import { MEDICAL_SPECIALISTS, CLINICAL_DISEASE_DB } from '../data/medicalKnowledge';
 
 interface SidebarProps {
   currentTab: TabKey;
@@ -133,7 +134,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             >
               <div className="flex items-center gap-2.5">
                 <Stethoscope className={`w-4 h-4 ${currentTab === 'specialists' ? 'text-teal-600' : 'text-slate-400'}`} />
-                <span>Doctor Directory (8 Specialties)</span>
+                <span>Doctor Directory ({MEDICAL_SPECIALISTS.length} Specialties)</span>
               </div>
               <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
             </button>
@@ -151,7 +152,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             >
               <div className="flex items-center gap-2.5">
                 <BookOpen className={`w-4 h-4 ${currentTab === 'knowledge' ? 'text-teal-600' : 'text-slate-400'}`} />
-                <span>Disease & Library (26 Conditions)</span>
+                <span>Disease & Library ({CLINICAL_DISEASE_DB.length} Conditions)</span>
               </div>
               <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
             </button>

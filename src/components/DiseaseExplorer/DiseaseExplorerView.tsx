@@ -6,13 +6,58 @@ interface DiseaseExplorerViewProps {
   onSelectForChat?: (query: string) => void;
 }
 
+const DISEASE_CATEGORY_TABS = [
+  { id: 'All', label: 'All Conditions', match: () => true },
+  {
+    id: 'respiratory',
+    label: 'Respiratory & ENT',
+    match: (cat: string) => /respiratory|pulmonary|ear, nose & throat|ent/i.test(cat)
+  },
+  {
+    id: 'infectious',
+    label: 'Infectious & Viral',
+    match: (cat: string) =>
+      /infectious|vector-borne|parasitic|bacterial|virology|nervous system infection|gastrointestinal infection|respiratory.*infection/i.test(cat)
+  },
+  {
+    id: 'digestive',
+    label: 'Digestive & Liver',
+    match: (cat: string) => /gastrointestinal|hepatology|surgical abdomen/i.test(cat)
+  },
+  {
+    id: 'neurological',
+    label: 'Neurology, Mental & Sleep',
+    match: (cat: string) => /neurolog|nervous system|mental health|sleep/i.test(cat)
+  },
+  {
+    id: 'metabolic',
+    label: 'Heart, Kidney & Metabolic',
+    match: (cat: string) => /cardio|endocrinology|nephrology|metabolic/i.test(cat)
+  },
+  {
+    id: 'skin_joints_eye',
+    label: 'Skin, Joints & Eye',
+    match: (cat: string) => /dermatology|orthopedics|rheumatology|ophthalmology/i.test(cat)
+  },
+  {
+    id: 'urology_women_blood',
+    label: "Urology, Women's & Blood",
+    match: (cat: string) => /urology|women's health|hematology|oncology|pediatrics/i.test(cat)
+  }
+] as const;
+
 export const DiseaseExplorerView: React.FC<DiseaseExplorerViewProps> = ({ onSelectForChat }) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [selectedDiseaseId, setSelectedDiseaseId] = useState<string>(CLINICAL_DISEASE_DB[0].id);
 
   const cleanQuery = searchQuery.toLowerCase().trim().replace(/[-_]/g, ' ');
+  const activeCategoryDef =
+    DISEASE_CATEGORY_TABS.find(t => t.id === selectedCategory) || DISEASE_CATEGORY_TABS[0];
 
   const filteredDiseases = CLINICAL_DISEASE_DB.filter(d => {
+    const matchesCategory = activeCategoryDef.match(d.category);
+    if (!matchesCategory) return false;
     if (!cleanQuery) return true;
     const nameMatch = d.name.toLowerCase().replace(/[-_]/g, ' ').includes(cleanQuery);
     const categoryMatch = d.category.toLowerCase().includes(cleanQuery);
@@ -68,21 +113,27 @@ export const DiseaseExplorerView: React.FC<DiseaseExplorerViewProps> = ({ onSele
             </p>
             <div className="flex flex-wrap items-center gap-1.5 mt-2">
               <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Quick searches:</span>
-              {['Hemorrhoids', 'Constipation', 'Smallpox', 'Dengue', 'Asthma', 'GERD', 'Migraine', 'Diabetes'].map(tag => (
+              {['Hemorrhoids', 'Constipation', 'UTI', 'Kidney Stones', 'Pink Eye', 'Anemia', 'PCOS', 'Gout', 'Anxiety', 'Dengue'].map(tag => (
                 <button
                   key={tag}
-                  onClick={() => setSearchQuery(tag)}
+                  onClick={() => {
+                    setSelectedCategory('All');
+                    setSearchQuery(tag);
+                  }}
                   className="px-2 py-0.5 rounded-full text-[11px] bg-slate-100 hover:bg-teal-50 hover:text-teal-700 text-slate-600 border border-slate-200 transition"
                 >
                   {tag}
                 </button>
               ))}
-              {searchQuery && (
+              {(searchQuery || selectedCategory !== 'All') && (
                 <button
-                  onClick={() => setSearchQuery('')}
+                  onClick={() => {
+                    setSearchQuery('');
+                    setSelectedCategory('All');
+                  }}
                   className="px-2 py-0.5 rounded-full text-[11px] bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 transition font-medium"
                 >
-                  Clear filter ✕
+                  Clear filters ✕
                 </button>
               )}
             </div>
@@ -101,15 +152,48 @@ export const DiseaseExplorerView: React.FC<DiseaseExplorerViewProps> = ({ onSele
             />
           </div>
         </div>
+
+        {/* Category filter tabs */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pt-4 mt-4 border-t border-slate-100 text-xs">
+          <span className="text-slate-400 font-medium shrink-0 mr-1">Category:</span>
+          {DISEASE_CATEGORY_TABS.map(tab => {
+            const count = CLINICAL_DISEASE_DB.filter(d => tab.match(d.category)).length;
+            const isActive = selectedCategory === tab.id;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setSelectedCategory(tab.id)}
+                className={`shrink-0 px-3 py-1.5 rounded-full font-medium transition inline-flex items-center gap-1.5 ${
+                  isActive
+                    ? 'bg-teal-600 text-white shadow-2xs'
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200/80 hover:text-slate-900'
+                }`}
+              >
+                <span>{tab.label}</span>
+                <span
+                  className={`text-[10px] px-1.5 py-0.5 rounded-full ${
+                    isActive ? 'bg-teal-700 text-teal-50' : 'bg-white text-slate-500'
+                  }`}
+                >
+                  {count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* List + detail */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
         {/* Disease list */}
-        <nav aria-label="Disease list" className="lg:col-span-4 space-y-2">
+        <nav
+          aria-label="Disease list"
+          className="lg:col-span-4 space-y-2 max-h-[720px] overflow-y-auto pr-1"
+        >
           {filteredDiseases.length === 0 && (
             <div className="p-5 rounded-xl bg-white border border-slate-200 text-xs text-slate-400 italic text-center">
-              No conditions match "{searchQuery}".
+              No conditions match "{searchQuery}"{selectedCategory !== 'All' ? ` in ${activeCategoryDef.label}` : ''}.
             </div>
           )}
           {filteredDiseases.map(disease => (

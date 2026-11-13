@@ -14,7 +14,9 @@ import {
   AlertTriangle,
   Pencil,
   Check,
-  X
+  X,
+  Copy,
+  Activity
 } from 'lucide-react';
 import { findSpecialistForKeywords, MedicalSpecialist, MEDICAL_SPECIALISTS } from '../../data/medicalKnowledge';
 
@@ -372,7 +374,9 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const [activeSpecialist, setActiveSpecialist] = useState<MedicalSpecialist | null>(null);
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
   const [editingText, setEditingText] = useState('');
+  const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const isFirstMount = useRef(true);
 
   const samplePrompts = [
@@ -397,6 +401,70 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
       query: 'How does the human immune system fight viral infections?'
     }
   ];
+
+  const appCapabilities = [
+    {
+      title: 'Symptom Assessment',
+      description: 'Describe how you feel to explore common, likely conditions.',
+      icon: Activity,
+      accent: 'bg-teal-50 text-teal-700 border-teal-200/80'
+    },
+    {
+      title: 'Disease & Treatment Guides',
+      description: 'Understand causes, lab tests, and standard care options.',
+      icon: BookOpen,
+      accent: 'bg-sky-50 text-sky-700 border-sky-200/80'
+    },
+    {
+      title: 'Clear Medical Doubts',
+      description: 'Get calm, plain-language answers to everyday health questions.',
+      icon: HelpCircle,
+      accent: 'bg-emerald-50 text-emerald-700 border-emerald-200/80'
+    },
+    {
+      title: 'Specialist Matching',
+      description: 'Find the right doctor specialty when your symptoms need care.',
+      icon: UserCheck,
+      accent: 'bg-amber-50 text-amber-700 border-amber-200/80'
+    }
+  ];
+
+  const handleCopyMessage = async (msg: Message) => {
+    const cleanText = msg.text
+      .replace(/^#{1,4}\s+/gm, '')
+      .replace(/\*\*(.*?)\*\*/g, '$1')
+      .replace(/\*(.*?)\*/g, '$1')
+      .trim();
+
+    const fullPayload = msg.recommendedSpecialist
+      ? `${cleanText}\n\nRecommended Specialist: ${msg.recommendedSpecialist.name}`
+      : cleanText;
+
+    try {
+      await navigator.clipboard.writeText(fullPayload);
+      setCopiedMessageId(msg.id);
+      setTimeout(() => {
+        setCopiedMessageId(prev => (prev === msg.id ? null : prev));
+      }, 2000);
+    } catch {
+      // Fallback for restricted clipboard contexts
+      const textarea = document.createElement('textarea');
+      textarea.value = fullPayload;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        setCopiedMessageId(msg.id);
+        setTimeout(() => {
+          setCopiedMessageId(prev => (prev === msg.id ? null : prev));
+        }, 2000);
+      } finally {
+        document.body.removeChild(textarea);
+      }
+    }
+  };
 
   const scrollToBottom = () => {
     if (messagesContainerRef.current) {
@@ -427,12 +495,22 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
     }
   }, [resetTrigger]);
 
+  useEffect(() => {
+    const el = textareaRef.current;
+    if (!el) return;
+    el.style.height = 'auto';
+    el.style.height = `${Math.min(el.scrollHeight, 140)}px`;
+  }, [inputText]);
+
   const handleSendMessage = async (textToSend?: string) => {
     const raw = (textToSend || inputText).trim();
     if (!raw || isSending) return;
 
     const timeStr = currentTimestamp();
     setInputText('');
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+    }
 
     const userMsg: Message = {
       id: generateMessageId('user'),
@@ -639,6 +717,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
   };
 
   const [isGuidanceOpen, setIsGuidanceOpen] = useState(false);
+  const hasStartedConversation = messages.some(m => m.sender === 'user');
 
   return (
     <div className="w-full max-w-[1700px] mx-auto p-3 sm:p-5 lg:p-6 grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
@@ -694,32 +773,75 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
           </div>
         </div>
 
-        {/* Quick prompt suggestions */}
-        <div className="px-4 py-2 border-b border-slate-100 bg-slate-50/70 flex items-center gap-1.5 overflow-x-auto shrink-0">
-          <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider shrink-0 mr-1">
-            Try asking:
-          </span>
-          {samplePrompts.map((p, idx) => (
-            <button
-              key={idx}
-              onClick={() => handleSendMessage(p.query)}
-              className="shrink-0 px-2.5 py-1 rounded-full bg-white border border-slate-300 text-slate-600 hover:border-teal-400 hover:text-teal-700 transition text-[11px] font-medium shadow-2xs"
-            >
-              {p.label}
-            </button>
-          ))}
-        </div>
+        {/* Quick prompt suggestions — shown once conversation is underway */}
+        {hasStartedConversation && (
+          <div className="px-4 py-2 border-b border-slate-100 bg-slate-50/70 flex items-center gap-1.5 overflow-x-auto shrink-0">
+            <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider shrink-0 mr-1">
+              Try asking:
+            </span>
+            {samplePrompts.map((p, idx) => (
+              <button
+                key={idx}
+                onClick={() => handleSendMessage(p.query)}
+                className="shrink-0 px-2.5 py-1 rounded-full bg-white border border-slate-300 text-slate-600 hover:border-teal-400 hover:text-teal-700 transition text-[11px] font-medium shadow-2xs"
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+        )}
 
-        {/* Messages Stream - ONLY THIS SCROLLS */}
+        {/* Messages Stream / Centered Empty State Hero */}
         <div
           ref={messagesContainerRef}
-          className="flex-1 overflow-y-auto p-4 lg:p-5 space-y-4 bg-slate-50/50 overscroll-contain"
+          className="flex-1 overflow-y-auto px-4 py-6 sm:px-8 sm:py-8 bg-slate-50/40 overscroll-contain"
         >
-          {messages.map(msg => (
-            <div
-              key={msg.id}
-              className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
-            >
+          {!hasStartedConversation && !isSending ? (
+            <div className="min-h-full flex flex-col items-center">
+              <div className="my-auto w-full max-w-2xl mx-auto flex flex-col items-center text-center py-2">
+                <div className="w-12 h-12 rounded-2xl bg-teal-600 text-white flex items-center justify-center shadow-sm shrink-0 mb-4">
+                  <Stethoscope className="w-6 h-6" />
+                </div>
+
+                <h3 className="text-lg sm:text-2xl font-bold text-slate-900 tracking-tight">
+                  What symptoms or health questions can I help with today?
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-500 mt-2 max-w-md leading-relaxed">
+                  Share what you are experiencing or ask any health question below.
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4 w-full mt-7 text-left">
+                  {appCapabilities.map((item, idx) => {
+                    const CardIcon = item.icon;
+                    return (
+                      <div
+                        key={idx}
+                        className="p-4 sm:p-4.5 rounded-2xl bg-white border border-slate-200/80 shadow-2xs flex items-start gap-3.5"
+                      >
+                        <div className={`w-9 h-9 rounded-xl border flex items-center justify-center shrink-0 ${item.accent}`}>
+                          <CardIcon className="w-4 h-4" />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <div className="font-semibold text-xs sm:text-sm text-slate-900 leading-snug">
+                            {item.title}
+                          </div>
+                          <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                            {item.description}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="max-w-3xl mx-auto w-full space-y-5">
+              {messages.map(msg => (
+                <div
+                  key={msg.id}
+                  className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
+                >
               {msg.sender === 'user' ? (
                 editingMessageId === msg.id ? (
                   <div className="w-full max-w-xl bg-white border-2 border-teal-500 rounded-2xl p-3.5 shadow-md space-y-2.5">
@@ -853,8 +975,30 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
                     )}
                   </div>
 
-                  <div className="text-[10px] text-slate-400 mt-1 px-1">
-                    {msg.timestamp}
+                  <div className="flex items-center gap-2.5 mt-1 px-1 text-[10px] text-slate-400">
+                    <span>{msg.timestamp}</span>
+                    <button
+                      type="button"
+                      onClick={() => handleCopyMessage(msg)}
+                      className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded transition ${
+                        copiedMessageId === msg.id
+                          ? 'text-emerald-700 bg-emerald-50 font-semibold'
+                          : 'text-slate-400 hover:text-teal-700 hover:bg-slate-100'
+                      }`}
+                      title="Copy response"
+                    >
+                      {copiedMessageId === msg.id ? (
+                        <>
+                          <Check className="w-3 h-3" />
+                          <span>Copied</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3 h-3" />
+                          <span>Copy</span>
+                        </>
+                      )}
+                    </button>
                   </div>
                 </>
               )}
@@ -867,34 +1011,43 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
               <span>Analyzing query, reviewing medical facts, and preparing response...</span>
             </div>
           )}
+            </div>
+          )}
         </div>
 
         {/* Input Bar */}
-        <div className="p-3.5 border-t border-slate-200 bg-white shrink-0">
+        <div className="p-3.5 sm:px-6 border-t border-slate-200 bg-white shrink-0">
           <form
             onSubmit={e => {
               e.preventDefault();
               handleSendMessage();
             }}
-            className="flex gap-2"
+            className="max-w-3xl mx-auto w-full flex items-end gap-2 bg-white border border-slate-300 rounded-2xl px-3.5 py-2 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-100 transition shadow-2xs"
           >
-            <input
-              type="text"
+            <textarea
+              ref={textareaRef}
+              rows={1}
               value={inputText}
               onChange={e => setInputText(e.target.value)}
-              placeholder="Describe symptoms or ask any disease doubt..."
-              className="flex-1 bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition"
+              onKeyDown={e => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSendMessage();
+                }
+              }}
+              placeholder="Describe symptoms or ask any disease doubt... (Shift+Enter for new line)"
+              className="flex-1 bg-transparent py-1.5 px-1 text-sm text-slate-900 placeholder-slate-400 focus:outline-none resize-none leading-relaxed max-h-[140px] overflow-y-auto"
             />
             <button
               type="submit"
               disabled={!inputText.trim() || isSending}
-              className="bg-teal-600 hover:bg-teal-700 disabled:opacity-40 disabled:cursor-not-allowed text-white px-4 py-2.5 rounded-xl font-medium text-sm inline-flex items-center gap-1.5 transition shadow-sm"
+              className="bg-teal-600 hover:bg-teal-700 disabled:opacity-40 disabled:cursor-not-allowed text-white px-4 py-2 rounded-xl font-medium text-sm inline-flex items-center gap-1.5 transition shadow-xs shrink-0"
             >
               <span>Send</span>
               <Send className="w-4 h-4" />
             </button>
           </form>
-          <p className="mt-2 text-[11px] text-slate-400 text-center">
+          <p className="mt-2 text-[11px] text-slate-400 text-center max-w-3xl mx-auto">
             CliniQ provides educational health information and symptom guidance. It does not replace a doctor's examination. Call your local emergency number for emergencies.
           </p>
         </div>

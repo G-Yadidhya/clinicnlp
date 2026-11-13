@@ -1194,6 +1194,704 @@ export const CLINICAL_DISEASE_DB: ClinicalDisease[] = [
     citations: [
       { source: 'American Thyroid Association (ATA) / American Association of Clinical Endocrinologists (AACE)', description: 'Clinical Practice Guidelines for Hypothyroidism in Adults.' }
     ]
+  },
+  {
+    id: 'urinary_tract_infection',
+    name: 'Urinary Tract Infection (UTI / Cystitis)',
+    icd10: 'N39.0',
+    category: 'Urology & Infectious Diseases',
+    urgency: 'ROUTINE',
+    summary: 'A common bacterial infection of the bladder or urethra causing painful burning urination (dysuria), frequent urinary urgency, cloudy urine, and lower pelvic discomfort.',
+    symptomWeights: {
+      fever: 0.35,
+      body_aches: 0.35,
+      nausea_vomiting: 0.15
+    },
+    coreSymptomIds: ['fever'],
+    redFlags: [
+      'High fever with shaking chills and flank/lower back pain (suspected kidney infection / pyelonephritis)',
+      'Persistent nausea and vomiting preventing fluid intake',
+      'Visible gross blood clots in urine or sudden confusion in older adults'
+    ],
+    causes: ['Escherichia coli (E. coli) or other gastrointestinal bacteria ascending into the urethra and bladder.'],
+    riskFactors: ['Female anatomy (shorter urethra), dehydration, sexual activity, menopause, urinary retention, kidney stones'],
+    howDiagnosed: [
+      'Urinalysis (urine dipstick checking leukocyte esterase and nitrites)',
+      'Microscopic urine culture and antibiotic sensitivity testing'
+    ],
+    generalTreatments: [
+      'Physician-prescribed short course of targeted oral antibiotics (e.g., nitrofurantoin, fosfomycin, or trimethoprim-sulfamethoxazole)',
+      'Abundant water intake to flush bacteria from the urinary tract',
+      'Phenazopyridine (short-term urinary pain relief) as advised by a clinician'
+    ],
+    prevention: ['Stay well hydrated, avoid holding urine for long periods, urinate after sexual intercourse, wipe front to back'],
+    citations: [
+      { source: 'Infectious Diseases Society of America (IDSA)', description: 'International Clinical Practice Guidelines for Acute Uncomplicated Cystitis.' }
+    ]
+  },
+  {
+    id: 'kidney_stones',
+    name: 'Kidney Stones (Nephrolithiasis / Renal Calculi)',
+    icd10: 'N20.0',
+    category: 'Urology & Nephrology',
+    urgency: 'URGENT',
+    summary: 'Hard mineral and salt deposits (calcium oxalate, uric acid) that form inside the kidneys and cause intense wave-like flank or lower abdominal pain when passing through the ureter.',
+    symptomWeights: {
+      nausea_vomiting: 0.70,
+      body_aches: 0.70,
+      fever: 0.25
+    },
+    coreSymptomIds: ['nausea_vomiting'],
+    redFlags: [
+      'Flank pain accompanied by fever and chills (obstructed infected kidney — urological emergency)',
+      'Complete inability to pass urine (anuria) or pain in a solitary kidney',
+      'Intractable vomiting or unbearable pain unresponsive to oral analgesics'
+    ],
+    causes: ['Low urine volume, concentrated urinary minerals (calcium, oxalate, uric acid), or low urinary citrate.'],
+    riskFactors: ['Chronic dehydration, high sodium or high animal protein diet, family history of stones, gout, obesity'],
+    howDiagnosed: [
+      'Non-contrast low-dose Abdominal/Pelvic CT scan (gold standard for stone size and location)',
+      'Renal ultrasound and urinalysis (looking for microscopic hematuria)'
+    ],
+    generalTreatments: [
+      'Aggressive hydration (2.5–3 liters of water daily) to help pass small stones (<5 mm)',
+      'Pain management (NSAIDs or clinician-prescribed analgesics) and medical expulsive therapy (tamsulosin)',
+      'Urological procedures (extracorporeal shock wave lithotripsy or ureteroscopy) for larger or obstructing stones'
+    ],
+    prevention: ['Drink enough water to keep urine pale yellow, add fresh lemon juice (citrate), limit excess sodium and high-oxalate foods'],
+    citations: [
+      { source: 'American Urological Association (AUA)', description: 'Medical and Surgical Management of Kidney Stones.' }
+    ]
+  },
+  {
+    id: 'conjunctivitis',
+    name: 'Conjunctivitis (Pink Eye)',
+    icd10: 'H10.9',
+    category: 'Ophthalmology (Eye Care)',
+    urgency: 'ROUTINE',
+    summary: 'Inflammation of the thin transparent conjunctiva lining the eyelid and eyeball, presenting with eye redness, gritty irritation, tearing, or sticky morning discharge.',
+    symptomWeights: {
+      photophobia: 0.40,
+      sore_throat: 0.25
+    },
+    coreSymptomIds: ['photophobia'],
+    redFlags: [
+      'Sudden decreased or blurry vision that does not clear with blinking',
+      'Moderate-to-severe deep eye pain or intense light sensitivity',
+      'Contact lens wearer with focal white spot on the cornea (corneal ulcer emergency)',
+      'Profuse thick yellow-green pus rapidly re-accumulating within minutes'
+    ],
+    causes: ['Adenoviruses (most common, often with cold symptoms), bacteria (Staphylococcus, Streptococcus), or seasonal/environmental allergens.'],
+    riskFactors: ['Close contact with someone with pink eye, sharing towels/cosmetics, seasonal allergies, improper contact lens hygiene'],
+    howDiagnosed: ['Clinical slit-lamp or penlight eye examination; viral vs bacterial vs allergic differentiation based on discharge and history.'],
+    generalTreatments: [
+      'Preservative-free lubricating artificial tears and cool/warm clean compresses',
+      'Discontinue contact lens wear immediately until fully resolved',
+      'Topical antihistamine drops for allergic pink eye; physician-prescribed antibiotic drops only if bacterial'
+    ],
+    prevention: ['Frequent handwashing, avoid rubbing eyes, wash pillowcases and discard contaminated eye makeup'],
+    citations: [
+      { source: 'American Academy of Ophthalmology (AAO)', description: 'Conjunctivitis Preferred Practice Pattern.' }
+    ]
+  },
+  {
+    id: 'iron_deficiency_anemia',
+    name: 'Anemia (Iron-Deficiency & Nutritional)',
+    icd10: 'D50.9',
+    category: 'Hematology & Primary Care',
+    urgency: 'ROUTINE',
+    summary: 'A reduction in healthy red blood cells or hemoglobin needed to carry oxygen to tissues, commonly causing persistent fatigue, pale skin, cold hands/feet, dizziness, and exertional breathlessness.',
+    symptomWeights: {
+      fatigue: 0.96,
+      shortness_of_breath: 0.50,
+      headache: 0.45
+    },
+    coreSymptomIds: ['fatigue'],
+    redFlags: [
+      'Chest pain, fainting (syncope), or shortness of breath at rest',
+      'Rapidly worsening pallor with black tarry stools or heavy acute blood loss',
+      'Very low hemoglobin (<7–8 g/dL) requiring urgent evaluation'
+    ],
+    causes: ['Inadequate dietary iron intake, heavy menstrual bleeding, occult gastrointestinal bleeding (ulcers, polyps), or poor intestinal absorption (celiac disease, Vitamin B12/folate deficiency).'],
+    riskFactors: ['Women of childbearing age, pregnancy, vegetarian/vegan diets without supplementation, frequent blood donors, chronic GI conditions'],
+    howDiagnosed: [
+      'Complete Blood Count (CBC) showing low hemoglobin and low MCV (microcytic)',
+      'Serum ferritin (most sensitive marker for iron stores), serum iron, TIBC, and Vitamin B12/folate levels'
+    ],
+    generalTreatments: [
+      'Evaluating and treating the underlying source of iron loss or malabsorption',
+      'Physician-guided oral iron supplementation (ferrous sulfate or bisglycinate, often paired with Vitamin C to boost absorption)',
+      'Iron-rich foods (lean meats, lentils, spinach, fortified cereals); intravenous iron if oral therapy is poorly tolerated'
+    ],
+    prevention: ['Balanced iron- and B12-rich nutrition, routine prenatal vitamins during pregnancy, timely screening for heavy menstrual bleeding'],
+    citations: [
+      { source: 'American Society of Hematology (ASH)', description: 'Clinical Overview and Management of Iron-Deficiency Anemia.' }
+    ]
+  },
+  {
+    id: 'gout',
+    name: 'Gout (Acute Gouty Arthritis)',
+    icd10: 'M10.9',
+    category: 'Rheumatology & Musculoskeletal',
+    urgency: 'ROUTINE',
+    summary: 'A painful inflammatory arthritis caused by needle-shaped monosodium urate crystal deposits in joints, classically starting suddenly overnight as intense swelling, redness, and warmth in the base of the big toe.',
+    symptomWeights: {
+      body_aches: 0.85,
+      fever: 0.25
+    },
+    coreSymptomIds: ['body_aches'],
+    redFlags: [
+      'Single hot swollen joint accompanied by high fever and chills (must rule out bacterial septic arthritis urgently)',
+      'Inability to bear any weight with rapidly spreading skin warmth up the leg'
+    ],
+    causes: ['Hyperuricemia (elevated blood uric acid) from decreased kidney excretion or increased purine breakdown.'],
+    riskFactors: ['High-purine diet (red meat, organ meats, shellfish), high-fructose beverages, beer/alcohol, kidney disease, diuretics, obesity'],
+    howDiagnosed: [
+      'Synovial joint fluid aspiration showing negatively birefringent urate crystals under polarized microscopy (gold standard)',
+      'Serum uric acid test (note: may be temporarily normal during an acute flare) and joint ultrasound'
+    ],
+    generalTreatments: [
+      'Acute flare relief: physician-prescribed NSAIDs, low-dose colchicine, or short oral/intra-articular corticosteroids',
+      'Rest, elevation, and gentle ice packs on the affected joint',
+      'Long-term urate-lowering therapy (allopurinol or febuxostat) for recurrent flares or kidney stones'
+    ],
+    prevention: ['Adequate water hydration, limiting alcohol and sugary sodas, moderating red meat and seafood intake, maintaining healthy weight'],
+    citations: [
+      { source: 'American College of Rheumatology (ACR)', description: 'Guideline for the Management of Gout.' }
+    ]
+  },
+  {
+    id: 'rheumatoid_arthritis',
+    name: 'Rheumatoid Arthritis (RA)',
+    icd10: 'M06.9',
+    category: 'Rheumatology & Autoimmune',
+    urgency: 'ROUTINE',
+    summary: 'A chronic autoimmune inflammatory disorder in which the immune system attacks the synovial lining of joints, typically causing symmetrical swelling, warmth, and morning stiffness lasting over 60 minutes in hands, wrists, and feet.',
+    symptomWeights: {
+      body_aches: 0.90,
+      fatigue: 0.80,
+      fever: 0.20
+    },
+    coreSymptomIds: ['body_aches', 'fatigue'],
+    redFlags: [
+      'Sudden single markedly hot, red joint with high fever (possible septic joint infection)',
+      'New numbness, tingling, or weakness in hands/legs (cervical spine instability)',
+      'Sudden chest pain or progressive shortness of breath (pleuritis or interstitial lung involvement)'
+    ],
+    causes: ['Autoimmune synovial inflammation driven by genetic susceptibility (HLA-DR4) and environmental triggers such as smoking.'],
+    riskFactors: ['Female sex (2–3x higher), family history, cigarette smoking, age 30–60'],
+    howDiagnosed: [
+      'Rheumatoid Factor (RF) and Anti-Cyclic Citrullinated Peptide (anti-CCP) antibody blood tests',
+      'Inflammatory markers (ESR and CRP) plus joint ultrasound or hand/foot X-rays'
+    ],
+    generalTreatments: [
+      'Early Disease-Modifying Antirheumatic Drugs (DMARDs such as methotrexate) prescribed by a rheumatologist to halt joint damage',
+      'Targeted biologics or JAK inhibitors when conventional DMARDs are insufficient',
+      'Joint-preserving physical and occupational therapy'
+    ],
+    prevention: ['Smoking cessation (the strongest modifiable risk factor), early rheumatology referral within weeks of persistent joint swelling'],
+    citations: [
+      { source: 'American College of Rheumatology (ACR)', description: 'Guideline for the Treatment of Rheumatoid Arthritis.' }
+    ]
+  },
+  {
+    id: 'pcos',
+    name: 'Polycystic Ovary Syndrome (PCOS)',
+    icd10: 'E28.2',
+    category: "Women's Health & Endocrinology",
+    urgency: 'ROUTINE',
+    summary: 'A common hormonal and metabolic condition in reproductive-age women characterized by irregular menstrual periods, elevated androgen levels (acne or excess facial hair), and small ovarian follicles on ultrasound.',
+    symptomWeights: {
+      fatigue: 0.55
+    },
+    coreSymptomIds: ['fatigue'],
+    redFlags: [
+      'Sudden severe one-sided pelvic pain with nausea (possible ovarian cyst rupture or torsion)',
+      'Very heavy, prolonged vaginal bleeding causing dizziness or anemia',
+      'Absence of periods for >3–6 months (endometrial protection evaluation needed)'
+    ],
+    causes: ['Hormonal imbalance involving insulin resistance, elevated luteinizing hormone (LH), and increased ovarian androgen production.'],
+    riskFactors: ['Family history of PCOS or Type 2 diabetes, insulin resistance, weight gain'],
+    howDiagnosed: [
+      'Rotterdam Criteria (at least 2 of 3: irregular/absent ovulation, clinical or blood signs of high androgens, polycystic ovaries on pelvic ultrasound)',
+      'Blood tests ruling out thyroid disorders, hyperprolactinemia, and screening for insulin resistance/lipids'
+    ],
+    generalTreatments: [
+      'Balanced low-glycemic nutrition and regular strength + aerobic exercise to improve insulin sensitivity',
+      'Combined hormonal contraceptives to regulate menstrual cycles and reduce acne/hair growth',
+      'Metformin or anti-androgen medications (e.g., spironolactone) under gynecologist/endocrinologist guidance'
+    ],
+    prevention: ['Routine metabolic health monitoring (blood glucose, blood pressure, cholesterol) and steady physical activity'],
+    citations: [
+      { source: 'International Evidence-Based Guideline for the Assessment and Management of PCOS', description: 'Diagnostic criteria, metabolic screening, and symptom management.' }
+    ]
+  },
+  {
+    id: 'hyperthyroidism',
+    name: 'Hyperthyroidism (Overactive Thyroid / Graves’ Disease)',
+    icd10: 'E05.9',
+    category: 'Endocrinology & Metabolism',
+    urgency: 'ROUTINE',
+    summary: 'Excessive production of thyroid hormones accelerating the body’s metabolism, commonly causing unintended weight loss, racing heartbeat (palpitations), hand tremors, heat intolerance, anxiety, and insomnia.',
+    symptomWeights: {
+      fatigue: 0.70,
+      diarrhea: 0.35
+    },
+    coreSymptomIds: ['fatigue'],
+    redFlags: [
+      'Thyroid Storm (life-threatening emergency): high fever, very rapid irregular heartbeat (>140 bpm), extreme agitation, or confusion',
+      'New eye bulging, double vision, or painful eye redness (Graves’ orbitopathy)',
+      'Chest pain or sudden shortness of breath'
+    ],
+    causes: ['Graves’ disease (autoimmune stimulation of the thyroid), toxic thyroid nodules, or transient thyroiditis.'],
+    riskFactors: ['Female sex, family history of autoimmune thyroid disease, recent pregnancy (postpartum thyroiditis)'],
+    howDiagnosed: [
+      'Low/suppressed Thyroid Stimulating Hormone (TSH) with elevated Free T4 and Free T3 blood tests',
+      'TSH receptor antibodies (TRAb) and thyroid ultrasound or radioactive iodine uptake scan'
+    ],
+    generalTreatments: [
+      'Beta-blockers (e.g., propranolol) for rapid symptom relief of palpitations and tremors',
+      'Antithyroid medications (methimazole, or propylthiouracil in early pregnancy)',
+      'Radioactive iodine therapy or thyroid surgery in selected cases under endocrinologist care'
+    ],
+    prevention: ['Avoid unnecessary high-dose iodine/kelp supplements; seek timely thyroid blood testing for unexplained palpitations or weight loss'],
+    citations: [
+      { source: 'American Thyroid Association (ATA)', description: 'Guidelines for Diagnosis and Management of Hyperthyroidism.' }
+    ]
+  },
+  {
+    id: 'psoriasis',
+    name: 'Psoriasis (Plaque Psoriasis)',
+    icd10: 'L40.0',
+    category: 'Dermatology',
+    urgency: 'ROUTINE',
+    summary: 'An immune-mediated chronic skin condition causing rapid skin cell turnover, forming well-defined raised red/violet plaques topped with silvery-white scales commonly on elbows, knees, scalp, and lower back.',
+    symptomWeights: {
+      rash: 0.96,
+      body_aches: 0.30
+    },
+    coreSymptomIds: ['rash'],
+    redFlags: [
+      'Widespread fiery redness covering >90% of skin with fever/chills (erythrodermic psoriasis emergency)',
+      'Sudden crops of painful pus-filled blisters (generalized pustular psoriasis)',
+      'Joint stiffness, swollen "sausage" fingers/toes, or back pain (psoriatic arthritis)'
+    ],
+    causes: ['Overactive IL-17 / IL-23 / TNF-alpha immune signaling accelerating epidermal keratinocyte proliferation.'],
+    riskFactors: ['Family history, strep throat triggers (guttate psoriasis), smoking, obesity, skin trauma (Koebner phenomenon), stress'],
+    howDiagnosed: ['Clinical skin, nail (pitting/oil spots), and scalp inspection by a dermatologist; occasional skin biopsy if uncertain.'],
+    generalTreatments: [
+      'Topical corticosteroids paired with Vitamin D analogs (calcipotriene) and salicylic acid/urea emollients',
+      'Narrowband UVB phototherapy for widespread plaques',
+      'Systemic immunomodulators or targeted biologics for moderate-to-severe psoriasis or psoriatic arthritis'
+    ],
+    prevention: ['Daily gentle moisturization, avoiding picking/scratching plaques, stress reduction, smoking cessation'],
+    citations: [
+      { source: 'American Academy of Dermatology (AAD) / National Psoriasis Foundation', description: 'Joint Guidelines of Care for the Management of Psoriasis.' }
+    ]
+  },
+  {
+    id: 'urticaria_hives',
+    name: 'Urticaria (Hives & Acute Allergic Reaction)',
+    icd10: 'L50.9',
+    category: 'Dermatology & Allergy',
+    urgency: 'ROUTINE',
+    summary: 'Raised, intensely itchy, pink or skin-colored welts (wheals) that change shape, fade, and reappear over minutes to hours, frequently triggered by mild viral bugs, foods, medications, or stress.',
+    symptomWeights: {
+      rash: 0.98
+    },
+    coreSymptomIds: ['rash'],
+    redFlags: [
+      'ANAPHYLAXIS EMERGENCY: Swelling of the lips, tongue, or throat, hoarse voice, wheezing, difficulty breathing, or sudden dizziness/fainting (call 911 immediately)'
+    ],
+    causes: ['Mast cell histamine release triggered by viral infections, food/drug allergies, insect stings, physical pressure/cold, or idiopathic chronic autoimmunity.'],
+    riskFactors: ['History of allergies or asthma, recent new medication (e.g., antibiotics, NSAIDs), recent viral illness'],
+    howDiagnosed: ['Clinical inspection of transient migrating wheals (individual hives last <24 hours); allergy testing if a specific trigger is suspected.'],
+    generalTreatments: [
+      'Second-generation non-drowsy oral antihistamines (cetirizine, fexofenadine, loratadine)',
+      'Cool compresses, loose cotton clothing, and lukewarm oatmeal baths',
+      'Immediate emergency epinephrine auto-injector + 911 if any airway swelling or breathing symptoms appear'
+    ],
+    prevention: ['Identify and avoid confirmed food/medication triggers, keep a symptom log of exposures prior to flares'],
+    citations: [
+      { source: 'American Academy of Allergy, Asthma & Immunology (AAAAI)', description: 'Practice Parameter for Acute and Chronic Urticaria.' }
+    ]
+  },
+  {
+    id: 'varicella_shingles',
+    name: 'Chickenpox (Varicella) & Shingles (Herpes Zoster)',
+    icd10: 'B01.9 / B02.9',
+    category: 'Infectious Diseases & Dermatology',
+    urgency: 'ROUTINE',
+    summary: 'Viral conditions caused by the Varicella-Zoster Virus (VZV). Chickenpox causes fever and generalized itchy fluid-filled blisters on a red base; Shingles occurs when dormant VZV reactivates along one nerve pathway, causing a painful burning blistering stripe on one side of the body.',
+    symptomWeights: {
+      rash: 0.96,
+      fever: 0.70,
+      fatigue: 0.65,
+      headache: 0.50,
+      body_aches: 0.55
+    },
+    coreSymptomIds: ['rash', 'fever'],
+    redFlags: [
+      'Shingles blisters on the tip of the nose, forehead, or around the eye (ophthalmic zoster — urgent eye evaluation needed)',
+      'Severe headache, confusion, or stiff neck',
+      'Difficulty breathing or immunocompromised state'
+    ],
+    causes: ['Primary infection (chickenpox) or sensory nerve ganglion reactivation (shingles) of Varicella-Zoster Virus.'],
+    riskFactors: ['Unvaccinated status (chickenpox), age ≥ 50, stress, or weakened immunity (shingles)'],
+    howDiagnosed: ['Distinctive clinical rash appearance ("dewdrop on a rose petal" blisters or unilateral dermatomal stripe); PCR swab if atypical.'],
+    generalTreatments: [
+      'Early prescription oral antivirals (valacyclovir or acyclovir — ideally started within 72 hours of shingles rash onset to reduce nerve pain)',
+      'Calamine lotion, cool colloidal oatmeal baths, and acetaminophen (AVOID aspirin in children due to Reye syndrome)',
+      'Keep blisters covered and isolate from pregnant women, newborns, and immunocompromised people until crusted'
+    ],
+    prevention: ['Varicella childhood vaccine (chickenpox) and recombinant Shingrix 2-dose vaccine for adults aged 50+'],
+    citations: [
+      { source: 'CDC Varicella & Shingles (Herpes Zoster) Clinical Guidelines', description: 'Antiviral timing, isolation precautions, and vaccination schedules.' }
+    ]
+  },
+  {
+    id: 'measles_rubeola',
+    name: 'Measles (Rubeola)',
+    icd10: 'B05.9',
+    category: 'Infectious Diseases & Pediatrics',
+    urgency: 'URGENT',
+    summary: 'A highly contagious viral illness beginning with high fever, cough, runny nose, and red watery eyes (the "3 Cs"), followed by tiny white spots inside the mouth (Koplik spots) and a blotchy red rash spreading downward from the hairline.',
+    symptomWeights: {
+      fever: 0.98,
+      rash: 0.96,
+      cough: 0.90,
+      photophobia: 0.60,
+      fatigue: 0.80
+    },
+    coreSymptomIds: ['fever', 'rash', 'cough'],
+    redFlags: [
+      'Rapid breathing, chest retractions, or pneumonia symptoms',
+      'Severe drowsiness, seizures, or neck stiffness (measles encephalitis risk)',
+      'Severe dehydration in young children'
+    ],
+    causes: ['Measles morbillivirus transmitted easily via airborne respiratory droplets that linger in rooms up to 2 hours.'],
+    riskFactors: ['Unvaccinated status, international travel to outbreak regions, Vitamin A deficiency'],
+    howDiagnosed: ['Measles-specific IgM blood antibody test and throat/nasal swab RT-PCR (call clinic BEFORE arriving to prevent waiting room exposure).'],
+    generalTreatments: [
+      'Strict respiratory isolation and supportive hydration/fever care',
+      'WHO-recommended Vitamin A supplementation in children to prevent eye damage and reduce complications',
+      'Prompt medical treatment for secondary ear infections or bacterial pneumonia'
+    ],
+    prevention: ['MMR (Measles, Mumps, Rubella) 2-dose vaccination provides ~97% lifelong protection'],
+    citations: [
+      { source: 'WHO & CDC Measles Clinical Guidance', description: 'Case identification, airborne precautions, and Vitamin A protocols.' }
+    ]
+  },
+  {
+    id: 'tuberculosis',
+    name: 'Tuberculosis (Pulmonary TB)',
+    icd10: 'A15.0',
+    category: 'Infectious Diseases & Pulmonology',
+    urgency: 'URGENT',
+    summary: 'A bacterial infection caused by Mycobacterium tuberculosis that primarily affects the lungs, characteristically causing a persistent cough lasting >3 weeks, drenching night sweats, evening low-grade fever, and unintentional weight loss.',
+    symptomWeights: {
+      cough: 0.95,
+      fever: 0.75,
+      fatigue: 0.85,
+      shortness_of_breath: 0.45,
+      chest_pain: 0.40
+    },
+    coreSymptomIds: ['cough', 'fever', 'fatigue'],
+    redFlags: [
+      'Coughing up blood or blood-streaked sputum (hemoptysis)',
+      'Severe shortness of breath or chest pain',
+      'Headache, neck stiffness, or confusion (TB meningitis)'
+    ],
+    causes: ['Inhalation of Mycobacterium tuberculosis airborne droplet nuclei expelled when an active pulmonary TB patient coughs or speaks.'],
+    riskFactors: ['Close household contact with active TB, living/traveling in high-incidence regions, HIV or immunosuppression, diabetes, malnutrition'],
+    howDiagnosed: [
+      'Chest X-ray showing upper-lobe infiltrates or cavities',
+      'Sputum Acid-Fast Bacilli (AFB) smear, rapid molecular Xpert MTB/RIF PCR test, and mycobacterial culture',
+      'Tuberculin Skin Test (TST) or IGRA blood test (QuantiFERON) for latent TB screening'
+    ],
+    generalTreatments: [
+      'Standardized multi-drug antibiotic regimen (RIPE: rifampin, isoniazid, pyrazinamide, ethambutol) taken strictly for 4–9 months under public health supervision',
+      'Airborne isolation during initial contagious weeks until sputum clears'
+    ],
+    prevention: ['Prompt treatment of latent TB infection, good indoor ventilation, respiratory masks, BCG vaccine in endemic countries'],
+    citations: [
+      { source: 'WHO Consolidated Guidelines on Tuberculosis', description: 'Rapid molecular diagnostics and standardized drug-susceptible TB regimens.' }
+    ]
+  },
+  {
+    id: 'viral_hepatitis',
+    name: 'Viral Hepatitis (Hepatitis A, B & C)',
+    icd10: 'B19.9',
+    category: 'Gastrointestinal & Hepatology',
+    urgency: 'ROUTINE',
+    summary: 'Viral inflammation of the liver causing fatigue, loss of appetite, nausea, right upper abdominal discomfort, dark tea-colored urine, pale stools, and yellowing of the eyes/skin (jaundice).',
+    symptomWeights: {
+      fatigue: 0.90,
+      nausea_vomiting: 0.75,
+      fever: 0.45,
+      body_aches: 0.50
+    },
+    coreSymptomIds: ['fatigue', 'nausea_vomiting'],
+    redFlags: [
+      'New confusion, slurred speech, or excessive sleepiness (hepatic encephalopathy / acute liver failure emergency)',
+      'Easy bruising, nosebleeds, or vomiting blood',
+      'Rapid abdominal swelling (ascites)'
+    ],
+    causes: ['Hepatitis A (contaminated food/water — acute only); Hepatitis B and C (blood/body fluid exposure — can become chronic liver disease).'],
+    riskFactors: ['Unprotected blood/needle exposure, unscreened transfusions, unsafe street food/water (Hep A), unvaccinated close contacts'],
+    howDiagnosed: [
+      'Liver Function Tests (elevated ALT/AST transaminases and bilirubin)',
+      'Viral serology panel (Anti-HAV IgM, HBsAg, Anti-HCV antibody with HCV RNA PCR)'
+    ],
+    generalTreatments: [
+      'Hepatitis A & acute Hep B: supportive rest, hydration, and strict avoidance of alcohol and liver-toxic medications (such as high-dose acetaminophen)',
+      'Chronic Hepatitis B: antiviral suppressive pills (tenofovir or entecavir)',
+      'Chronic Hepatitis C: short 8–12 week oral direct-acting antivirals (DAAs) that cure >95% of patients'
+    ],
+    prevention: ['Hepatitis A and Hepatitis B vaccines, universal Hepatitis C adult blood screening, safe food/water and sterile needles'],
+    citations: [
+      { source: 'AASLD / IDSA Hepatitis Guidance', description: 'Evidence-based testing, vaccination, and curative antiviral therapy.' }
+    ]
+  },
+  {
+    id: 'otitis_media',
+    name: 'Ear Infection (Otitis Media / Swimmer’s Ear)',
+    icd10: 'H66.9',
+    category: 'Ear, Nose & Throat (ENT)',
+    urgency: 'ROUTINE',
+    summary: 'Inflammation or fluid buildup behind the eardrum (middle ear) or in the outer ear canal, causing throbbing earache, muffled hearing, ear fullness, and sometimes mild fever following a cold.',
+    symptomWeights: {
+      fever: 0.55,
+      headache: 0.40,
+      sore_throat: 0.30
+    },
+    coreSymptomIds: ['fever'],
+    redFlags: [
+      'Redness, tender swelling, or protrusion behind the ear (mastoiditis — urgent ENT care)',
+      'Severe spinning dizziness, facial muscle weakness, or high fever with stiff neck',
+      'Sudden pus or bloody fluid draining from the ear canal'
+    ],
+    causes: ['Eustachian tube swelling trapping middle ear fluid after a cold/allergies (bacterial/viral otitis media) or water trapped in the ear canal (otitis externa).'],
+    riskFactors: ['Recent upper respiratory infection, seasonal allergies, young children (shorter Eustachian tubes), frequent swimming'],
+    howDiagnosed: ['Otoscopic examination of the eardrum (checking redness, bulging, or fluid level) and gentle ear canal inspection.'],
+    generalTreatments: [
+      'Pain control with acetaminophen or ibuprofen and warm dry compresses against the outer ear',
+      'Observation ("watchful waiting") for mild adult/older-child cases, or physician-prescribed oral/ear-drop antibiotics when bacterial signs are clear'
+    ],
+    prevention: ['Manage nasal allergies during colds, dry outer ears gently after swimming, avoid inserting cotton swabs inside the ear canal'],
+    citations: [
+      { source: 'American Academy of Pediatrics (AAP) / AAO-HNS', description: 'Diagnosis and Management of Acute Otitis Media.' }
+    ]
+  },
+  {
+    id: 'vertigo_bppv',
+    name: 'Vertigo & Inner Ear Balance Disorder (BPPV)',
+    icd10: 'H81.1',
+    category: 'Neurological & ENT Balance',
+    urgency: 'ROUTINE',
+    summary: 'A false spinning or whirling sensation triggered especially when rolling over in bed, looking up, or tilting the head, most commonly caused by tiny displaced calcium crystals inside the inner ear balance canals (BPPV).',
+    symptomWeights: {
+      nausea_vomiting: 0.70,
+      headache: 0.30
+    },
+    coreSymptomIds: ['nausea_vomiting'],
+    redFlags: [
+      'Vertigo accompanied by double vision, slurred speech, facial droop, limb weakness, or inability to walk unassisted (possible posterior stroke — call 911)',
+      'Sudden hearing loss in one ear or severe new headache'
+    ],
+    causes: ['Benign Paroxysmal Positional Vertigo (loose otoconia crystals in semicircular canals), vestibular neuritis (post-viral nerve inflammation), or Meniere’s disease.'],
+    riskFactors: ['Mild head bump, aging, inner ear viral inflammation, prolonged bed rest, Vitamin D deficiency'],
+    howDiagnosed: ['Dix-Hallpike bedside positional test observing characteristic eye movement (nystagmus) and cranial nerve neurological exam.'],
+    generalTreatments: [
+      'Epley Canalith Repositioning Maneuver (guided by a physician, ENT, or vestibular physical therapist — often resolves BPPV in 1–2 sessions)',
+      'Short-term motion-sickness relief (meclizine) only during severe acute spinning, as prolonged use slows brain compensation',
+      'Sit slowly at the edge of the bed before standing to prevent falls'
+    ],
+    prevention: ['Stay hydrated, get up slowly from lying down, perform prescribed vestibular balance exercises'],
+    citations: [
+      { source: 'AAO-HNS Clinical Practice Guideline: BPPV', description: 'Diagnostic maneuvers and particle repositioning therapy.' }
+    ]
+  },
+  {
+    id: 'anxiety_panic_disorder',
+    name: 'Generalized Anxiety & Panic Attacks',
+    icd10: 'F41.1',
+    category: 'Mental Health & Behavioral Medicine',
+    urgency: 'ROUTINE',
+    summary: 'Excessive persistent worry or sudden surges of intense fear (panic attacks) triggering real physical symptoms via the fight-or-flight nervous system: racing heart, chest tightness, shortness of breath, dizziness, and muscle tension.',
+    symptomWeights: {
+      fatigue: 0.75,
+      shortness_of_breath: 0.55,
+      chest_pain: 0.45,
+      headache: 0.50,
+      nausea_vomiting: 0.40
+    },
+    coreSymptomIds: ['fatigue', 'shortness_of_breath'],
+    redFlags: [
+      'First-ever severe chest pain or breathing trouble (always evaluate medically to rule out cardiac or lung causes before assuming panic)',
+      'Thoughts of self-harm or severe hopelessness (contact a crisis helpline or emergency care immediately)'
+    ],
+    causes: ['Dysregulation of amygdala threat circuits, chronic life stressors, genetics, sleep deprivation, or stimulants like excess caffeine.'],
+    riskFactors: ['Chronic work/family stress, family history, thyroid imbalance (rule out hyperthyroidism), poor sleep, excessive caffeine'],
+    howDiagnosed: ['Clinical mental health screening (GAD-7 questionnaire) after baseline medical labs (TSH, CBC, ECG) rule out physical mimics.'],
+    generalTreatments: [
+      'Cognitive Behavioral Therapy (CBT) — the gold-standard evidence-based psychological therapy',
+      'Slow diaphragmatic breathing (e.g., 4-second inhale, 6-second exhale) and regular aerobic exercise',
+      'Physician-prescribed SSRIs/SNRIs when daily function is affected'
+    ],
+    prevention: ['Consistent sleep routine, reducing caffeine/alcohol, mindfulness practice, talking openly with a primary doctor or therapist'],
+    citations: [
+      { source: 'National Institute of Mental Health (NIMH)', description: 'Anxiety Disorders: Symptoms, Diagnosis, and Evidence-Based Therapies.' }
+    ]
+  },
+  {
+    id: 'insomnia_sleep_disorder',
+    name: 'Chronic Insomnia & Sleep Disruption',
+    icd10: 'G47.0',
+    category: 'Mental Health & Sleep Medicine',
+    urgency: 'ROUTINE',
+    summary: 'Persistent difficulty falling asleep, staying asleep, or waking up too early despite adequate opportunity to sleep, resulting in daytime fatigue, poor concentration, and irritability.',
+    symptomWeights: {
+      fatigue: 0.95,
+      headache: 0.45
+    },
+    coreSymptomIds: ['fatigue'],
+    redFlags: [
+      'Loud gasping, choking, or witnessed breathing pauses during sleep (Obstructive Sleep Apnea — raises blood pressure & heart risk)',
+      'Irresistible daytime sleep episodes while driving'
+    ],
+    causes: ['Hyperarousal, irregular circadian schedules, evening blue-light screen exposure, stress, late caffeine, acid reflux, or restless legs.'],
+    riskFactors: ['Shift work, anxiety/depression, chronic pain, high evening screen use, late meals or caffeine after 2 PM'],
+    howDiagnosed: ['2-week sleep diary and clinical sleep history; overnight sleep study (polysomnography) if sleep apnea is suspected.'],
+    generalTreatments: [
+      'Cognitive Behavioral Therapy for Insomnia (CBT-I) — first-line long-term cure',
+      'Strict sleep hygiene: consistent wake time daily, cool dark bedroom, no screens 45–60 min before bed, reserve bed only for sleep',
+      'Short-term physician-supervised sleep aids only when behavioral therapy alone is not enough'
+    ],
+    prevention: ['Morning outdoor sunlight exposure within 30 minutes of waking, regular daytime exercise, caffeine cutoff 8+ hours before bed'],
+    citations: [
+      { source: 'American Academy of Sleep Medicine (AASM)', description: 'Clinical Practice Guideline for Chronic Insomnia in Adults.' }
+    ]
+  },
+  {
+    id: 'sciatica_lumbar_disc',
+    name: 'Sciatica & Lumbar Disc Herniation',
+    icd10: 'M54.3',
+    category: 'Orthopedics & Neurology',
+    urgency: 'ROUTINE',
+    summary: 'Sharp, shooting, or burning nerve pain radiating from the lower back down through one buttock and the back of the leg, often accompanied by numbness or pins-and-needles tingling along the sciatic nerve.',
+    symptomWeights: {
+      body_aches: 0.95
+    },
+    coreSymptomIds: ['body_aches'],
+    redFlags: [
+      'CAUDA EQUINA EMERGENCY: New loss of bowel or bladder control, or numbness in the groin/saddle area',
+      'Sudden progressive foot drop (inability to lift the front of the foot while walking) or severe leg weakness',
+      'Back pain accompanied by fever or unexplained weight loss'
+    ],
+    causes: ['A bulging or herniated lower lumbar intervertebral disc (typically L4-L5 or L5-S1) or piriformis muscle tightness irritating the sciatic nerve root.'],
+    riskFactors: ['Prolonged sitting, improper heavy lifting, sudden twisting, core muscle deconditioning, smoking'],
+    howDiagnosed: ['Physical straight-leg raise neurological exam; Lumbar Spine MRI if pain persists >4–6 weeks or neurological deficits appear.'],
+    generalTreatments: [
+      'Gentle daily walking and avoiding prolonged strict bed rest (gentle movement speeds disc healing)',
+      'Targeted physical therapy focusing on lumbar stabilization and McKenzie extension exercises',
+      'Short-term anti-inflammatory pain relievers or nerve-calming medications under clinician advice'
+    ],
+    prevention: ['Lumbar chair support, lifting with legs instead of bending the waist, regular core-strengthening exercises'],
+    citations: [
+      { source: 'American College of Physicians (ACP)', description: 'Noninvasive Treatments for Acute, Subacute, and Chronic Low Back Pain.' }
+    ]
+  },
+  {
+    id: 'gallstones',
+    name: 'Gallstones (Cholelithiasis / Biliary Colic)',
+    icd10: 'K80.2',
+    category: 'Gastrointestinal Medicine',
+    urgency: 'URGENT',
+    summary: 'Hardened cholesterol or pigment stones inside the gallbladder that can temporarily block bile ducts after fatty meals, causing sharp cramping pain in the right upper abdomen radiating to the right shoulder blade.',
+    symptomWeights: {
+      nausea_vomiting: 0.75,
+      fever: 0.35,
+      chest_pain: 0.35
+    },
+    coreSymptomIds: ['nausea_vomiting'],
+    redFlags: [
+      'Right upper abdominal pain lasting >4–6 hours accompanied by fever and chills (acute cholecystitis)',
+      'Yellowing of the eyes or skin (jaundice), pale stools, or dark urine (bile duct obstruction)',
+      'Severe pain radiating straight to the back with persistent vomiting (gallstone pancreatitis)'
+    ],
+    causes: ['Cholesterol supersaturation in bile, sluggish gallbladder emptying, or rapid weight loss.'],
+    riskFactors: ['Female sex, age >40, overweight/obesity, pregnancy, rapid weight loss diets, family history'],
+    howDiagnosed: ['Right upper quadrant abdominal ultrasound (rapid, non-invasive, >95% accurate for gallstones) and liver/pancreas blood enzymes.'],
+    generalTreatments: [
+      'Small low-fat meals while awaiting specialist evaluation to reduce gallbladder contractions',
+      'Elective laparoscopic cholecystectomy (minimally invasive gallbladder removal) for recurring symptomatic attacks',
+      'Urgent hospital antibiotics and surgery if acute gallbladder infection develops'
+    ],
+    prevention: ['Balanced fiber-rich diet with healthy unsaturated fats, gradual rather than crash weight loss, regular physical exercise'],
+    citations: [
+      { source: 'American Gastroenterological Association (AGA) / SAGES', description: 'Management of Symptomatic Cholelithiasis and Acute Cholecystitis.' }
+    ]
+  },
+  {
+    id: 'chronic_kidney_disease',
+    name: 'Chronic Kidney Disease (CKD)',
+    icd10: 'N18.9',
+    category: 'Nephrology & Metabolic Medicine',
+    urgency: 'ROUTINE',
+    summary: 'Gradual, long-term decline in the kidneys’ filtering ability (eGFR), frequently silent until later stages when it may cause ankle swelling, foamy urine, fatigue, and rising blood pressure.',
+    symptomWeights: {
+      fatigue: 0.80
+    },
+    coreSymptomIds: ['fatigue'],
+    redFlags: [
+      'Sudden marked drop in urine output, severe shortness of breath (fluid overload), or chest pain',
+      'Severe confusion, uncontrolled nausea, or dangerously high potassium on blood tests'
+    ],
+    causes: ['Long-standing poorly controlled diabetes and high blood pressure (responsible for ~2/3 of cases), chronic NSAID overuse, or autoimmune nephritis.'],
+    riskFactors: ['Diabetes mellitus, hypertension, heart disease, family history of kidney failure, age ≥ 60, frequent NSAID painkiller use'],
+    howDiagnosed: [
+      'Blood creatinine and Estimated Glomerular Filtration Rate (eGFR)',
+      'Urine Albumin-to-Creatinine Ratio (uACR) checking early protein leakage',
+      'Renal ultrasound'
+    ],
+    generalTreatments: [
+      'Tight blood pressure (<120-130/80 mmHg) and blood sugar control',
+      'Kidney-protective medications (ACE inhibitors/ARBs and SGLT2 inhibitors) prescribed by a nephrologist or GP',
+      'Avoiding unnecessary NSAIDs (ibuprofen, naproxen) and tailoring dietary sodium/potassium as advised'
+    ],
+    prevention: ['Annual eGFR and urine albumin screening if diabetic or hypertensive, stay hydrated, avoid chronic over-the-counter NSAIDs'],
+    citations: [
+      { source: 'KDIGO (Kidney Disease: Improving Global Outcomes)', description: 'Clinical Practice Guideline for the Evaluation and Management of CKD.' }
+    ]
+  },
+  {
+    id: 'fungal_skin_infection',
+    name: 'Fungal Skin Infections (Ringworm / Athlete’s Foot)',
+    icd10: 'B35.9',
+    category: 'Dermatology',
+    urgency: 'ROUTINE',
+    summary: 'Superficial dermatophyte fungal infections of the skin, scalp, groin, or feet causing itchy, scaly, circular red rings with clearer centers (ringworm / tinea corporis) or peeling skin between the toes (athlete’s foot).',
+    symptomWeights: {
+      rash: 0.95
+    },
+    coreSymptomIds: ['rash'],
+    redFlags: [
+      'Spreading warmth, pus, red streaks, or fever (secondary bacterial cellulitis)',
+      'Patchy hair loss with tender boggy scalp swelling in children (kerion requiring oral antifungal therapy)'
+    ],
+    causes: ['Trichophyton, Microsporum, or Epidermophyton fungi thriving in warm, moist skin folds and shared damp floors.'],
+    riskFactors: ['Sweaty athletic gear, communal locker rooms/showers, tight non-breathable footwear, diabetes, close contact with pets'],
+    howDiagnosed: ['Classic ring-shaped scaling border on clinical exam; skin scraping KOH microscopic prep if atypical.'],
+    generalTreatments: [
+      'Over-the-counter topical antifungal creams (terbinafine, clotrimazole, miconazole) applied for 2–4 weeks (continuing 1 week after rash clears)',
+      'Avoid using plain steroid creams alone on fungal rashes (steroids worsen fungal spread)',
+      'Oral antifungal prescriptions (terbinafine, fluconazole) for scalp or thick nail involvement'
+    ],
+    prevention: ['Keep skin dry, wear breathable cotton socks and shower sandals in public pools/gyms, do not share towels'],
+    citations: [
+      { source: 'American Academy of Dermatology (AAD)', description: 'Management of Superficial Cutaneous Fungal Infections.' }
+    ]
   }
 ];
 
@@ -1427,31 +2125,231 @@ export const MEDICAL_SPECIALISTS: MedicalSpecialist[] = [
       'What ergonomic supports or braces should I use?'
     ],
     icon: 'Bone'
+  },
+  {
+    id: 'endocrinologist',
+    name: 'Endocrinologist',
+    title: 'Hormone, Thyroid & Diabetes Specialist',
+    category: 'Endocrinology & Metabolism',
+    description: 'Specializes in glands and hormone-related conditions including diabetes, thyroid disorders, PCOS, osteoporosis, and metabolic imbalances.',
+    commonSymptoms: ['Persistent unexplained fatigue', 'Unexplained weight gain or loss', 'Feeling constantly cold or overheated', 'Excessive thirst or frequent urination', 'Irregular hormonal cycles'],
+    sampleConditions: ['Type 2 & Type 1 Diabetes', 'Hypothyroidism (Hashimoto’s)', 'Hyperthyroidism (Graves’)', 'PCOS', 'Osteoporosis'],
+    whenToConsult: 'Consult for abnormal TSH/thyroid labs, elevated HbA1c or blood sugar management, or persistent hormonal symptoms.',
+    typicalTests: ['HbA1c & fasting glucose', 'TSH, Free T4, Free T3 & thyroid antibodies', 'Thyroid ultrasound', 'Hormone panels (insulin, cortisol, prolactin)'],
+    questionsToAsk: [
+      'Are my symptoms linked to thyroid function, blood sugar, or another hormone?',
+      'How often should I repeat my hormone or A1c blood panels?',
+      'What nutrition and daily routine habits support my hormone balance?'
+    ],
+    icon: 'Activity'
+  },
+  {
+    id: 'infectious_disease',
+    name: 'Infectious Disease Specialist',
+    title: 'Viral, Bacterial & Tropical Infection Specialist',
+    category: 'Infectious Diseases',
+    description: 'Diagnoses and treats complex, prolonged, vector-borne, or unusual viral, bacterial, parasitic, and fungal infections.',
+    commonSymptoms: ['Prolonged unexplained fever', 'Fever after tropical travel', 'Body aches with rash', 'Chronic cough with night sweats', 'Slow-to-resolve infections'],
+    sampleConditions: ['Dengue Fever', 'Malaria', 'Typhoid Fever', 'Tuberculosis', 'Viral Hepatitis', 'Complex Shingles / Mpox'],
+    whenToConsult: 'Consult for fevers lasting over 5–7 days, illnesses acquired during travel, or infections not responding to initial primary care treatment.',
+    typicalTests: ['Blood, urine & sputum cultures', 'Targeted PCR & antigen panels (e.g., Dengue NS1, Malaria smear)', 'Serology antibody titers', 'Inflammatory markers (CRP, ESR)'],
+    questionsToAsk: [
+      'Is this infection viral, bacterial, or parasitic, and what confirmatory test do I need?',
+      'Are antibiotics or antivirals indicated, or is supportive hydration safest?',
+      'What warning signs require immediate hospital monitoring?'
+    ],
+    icon: 'Microscope'
+  },
+  {
+    id: 'ophthalmologist',
+    name: 'Ophthalmologist',
+    title: 'Eye & Vision Specialist',
+    category: 'Ophthalmology (Eye Care)',
+    description: 'Medical and surgical eye doctor trained to diagnose and treat eye infections, vision changes, corneal issues, glaucoma, and retinal conditions.',
+    commonSymptoms: ['Red, irritated, or watery eyes', 'Eye pain or light sensitivity', 'Sudden blurry vision', 'New floaters or flashes of light', 'Sticky eye discharge'],
+    sampleConditions: ['Conjunctivitis (Pink Eye)', 'Dry Eye Syndrome', 'Glaucoma', 'Cataracts', 'Corneal abrasion / ulcer', 'Diabetic retinopathy'],
+    whenToConsult: 'Consult promptly for eye pain, sudden vision changes, contact lens discomfort with redness, or eye redness lasting more than a few days.',
+    typicalTests: ['Slit-lamp biomicroscopy', 'Visual acuity & refraction exam', 'Tonometry (eye pressure check)', 'Dilated retinal fundus exam'],
+    questionsToAsk: [
+      'Is my eye redness infectious, allergic, or caused by dry eyes?',
+      'Should I pause wearing contact lenses and for how long?',
+      'Do my prescription eye drops contain steroids or antibiotics?'
+    ],
+    icon: 'Eye'
+  },
+  {
+    id: 'urologist',
+    name: 'Urologist',
+    title: 'Urinary Tract & Kidney Stone Specialist',
+    category: 'Urology',
+    description: 'Diagnoses and manages conditions of the kidneys, ureters, bladder, urethra, and male reproductive system.',
+    commonSymptoms: ['Burning or pain when urinating', 'Frequent or urgent urination', 'Sharp flank or lower back side pain', 'Blood in urine', 'Weak urine stream'],
+    sampleConditions: ['Urinary Tract Infection (UTI)', 'Kidney Stones', 'Benign Prostatic Hyperplasia (BPH)', 'Overactive bladder', 'Prostatitis'],
+    whenToConsult: 'Consult for recurrent UTIs, suspected kidney stones, visible blood in the urine, or persistent urinary difficulty.',
+    typicalTests: ['Urinalysis & urine culture', 'Renal & bladder ultrasound', 'Low-dose non-contrast CT scan', 'PSA & post-void residual scan'],
+    questionsToAsk: [
+      'Are my urinary symptoms due to an infection, a stone, or bladder irritation?',
+      'Will a small kidney stone pass naturally with hydration and medication?',
+      'How can I prevent recurrent urinary infections or stones?'
+    ],
+    icon: 'Droplets'
+  },
+  {
+    id: 'gynecologist',
+    name: 'Gynecologist / OB-GYN',
+    title: "Women's Reproductive & Pelvic Health Specialist",
+    category: "Women's Health & OB-GYN",
+    description: "Focuses on women's reproductive health, menstrual cycles, hormonal balance, pelvic pain, pregnancy care, and preventive cervical/breast screening.",
+    commonSymptoms: ['Irregular or missed periods', 'Severe menstrual cramps or pelvic pain', 'Unusually heavy bleeding', 'Hormonal acne', 'Vaginal itching or discharge'],
+    sampleConditions: ['Polycystic Ovary Syndrome (PCOS)', 'Endometriosis', 'Uterine fibroids', 'Yeast / bacterial vaginosis', 'Menopause transition'],
+    whenToConsult: 'Consult for annual preventive screenings, irregular cycles, severe pelvic pain, or pregnancy planning and care.',
+    typicalTests: ['Pelvic ultrasound', 'Pap smear & HPV screening', 'Hormone panel (LH, FSH, estrogen, testosterone)', 'STI & vaginal swab testing'],
+    questionsToAsk: [
+      'Could my irregular periods or pelvic pain be related to PCOS, fibroids, or thyroid health?',
+      'Which preventive screenings (Pap, HPV, mammogram) am I due for?',
+      'What hormonal or non-hormonal management options fit my goals?'
+    ],
+    icon: 'HeartHandshake'
+  },
+  {
+    id: 'pediatrician',
+    name: 'Pediatrician',
+    title: 'Infant, Child & Adolescent Specialist',
+    category: 'Pediatrics',
+    description: 'Specializes in the physical, developmental, and preventive medical care of infants, children, and teenagers from birth through age 18.',
+    commonSymptoms: ['Childhood fever', 'Ear pulling or crying', 'Childhood rashes (chickenpox, measles)', 'Barking cough or wheezing', 'Poor appetite or lethargy in a child'],
+    sampleConditions: ['Childhood ear infections', 'Chickenpox / Viral exanthems', 'Croup & RSV', 'Strep throat', 'Asthma & growth milestones'],
+    whenToConsult: 'Consult immediately for any fever in a baby under 3 months, persistent high fever, breathing difficulty, or poor hydration in a child.',
+    typicalTests: ['Pediatric physical & growth chart exam', 'Rapid strep / RSV / flu swabs', 'Otoscopic ear exam', 'Routine childhood immunization checks'],
+    questionsToAsk: [
+      'What weight-based dose of fever reducer is safe for my child?',
+      'What signs of dehydration should I monitor at home?',
+      'When is it safe for my child to return to school or daycare?'
+    ],
+    icon: 'Baby'
+  },
+  {
+    id: 'psychiatrist',
+    name: 'Psychiatrist / Mental Health Specialist',
+    title: 'Anxiety, Mood & Sleep Medicine Specialist',
+    category: 'Psychiatry & Mental Health',
+    description: 'Medical doctor specializing in emotional well-being, anxiety, panic attacks, depression, insomnia, and stress-related physical symptoms.',
+    commonSymptoms: ['Persistent worry or panic episodes', 'Chronic trouble falling or staying asleep', 'Low mood or emotional burnout', 'Stress-triggered racing heart', 'Difficulty concentrating'],
+    sampleConditions: ['Generalized Anxiety Disorder (GAD)', 'Panic Disorder', 'Chronic Insomnia', 'Major Depressive Disorder', 'Work & caregiver burnout'],
+    whenToConsult: 'Consult when worry, low mood, panic, or poor sleep lasts more than 2 weeks and interferes with daily life or work.',
+    typicalTests: ['Validated clinical questionnaires (GAD-7, PHQ-9)', 'Sleep diary review', 'Baseline lab exclusions (thyroid TSH, Vitamin B12, Vitamin D)'],
+    questionsToAsk: [
+      'Would structured therapy like CBT or CBT-I help before or alongside medication?',
+      'Could physical factors like thyroid or sleep quality be worsening my symptoms?',
+      'What daily habits make the biggest difference for nervous system recovery?'
+    ],
+    icon: 'Brain'
+  },
+  {
+    id: 'rheumatologist',
+    name: 'Rheumatologist',
+    title: 'Autoimmune & Inflammatory Joint Specialist',
+    category: 'Rheumatology & Autoimmune',
+    description: 'Diagnoses and treats autoimmune disorders and inflammatory arthritis affecting joints, connective tissues, muscles, and blood vessels.',
+    commonSymptoms: ['Symmetrical swollen hand or foot joints', 'Morning joint stiffness lasting >1 hour', 'Sudden hot swollen big toe', 'Widespread fatigue with joint aches', 'Butterfly facial rash'],
+    sampleConditions: ['Rheumatoid Arthritis', 'Gout', 'Systemic Lupus Erythematosus (SLE)', 'Psoriatic Arthritis', 'Ankylosing Spondylitis'],
+    whenToConsult: 'Consult for persistent joint swelling, morning stiffness lasting over an hour, or recurring gout flares.',
+    typicalTests: ['Rheumatoid Factor (RF) & anti-CCP antibodies', 'ANA & autoimmune panels', 'ESR / CRP inflammation markers', 'Joint ultrasound or synovial fluid analysis'],
+    questionsToAsk: [
+      'Is my joint pain inflammatory/autoimmune rather than mechanical wear-and-tear?',
+      'Do I need early DMARD therapy to protect my joints long-term?',
+      'What low-impact exercises are safest during a flare vs remission?'
+    ],
+    icon: 'Flame'
+  },
+  {
+    id: 'oncologist',
+    name: 'Hematologist / Oncologist',
+    title: 'Blood Disorders & Cancer Care Specialist',
+    category: 'Oncology & Hematology',
+    description: 'Specializes in blood conditions (like anemia and clotting disorders) as well as cancer screening evaluation, diagnostic staging, and targeted oncology care.',
+    commonSymptoms: ['Severe unexplained fatigue with pallor', 'Unexplained weight loss (>10 lbs)', 'Persistent painless swollen lymph nodes or lump', 'Unusual bruising or bleeding', 'Abnormal blood count results'],
+    sampleConditions: ['Iron-Deficiency & B12 Anemia', 'Suspicious masses requiring biopsy', 'Breast, colorectal, lung & skin cancer care', 'Lymphoma / Blood disorders'],
+    whenToConsult: 'Consult upon referral from your GP for persistently abnormal CBC blood counts, unexplained persistent lumps, or specialized cancer screening and care.',
+    typicalTests: ['Complete Blood Count & peripheral smear', 'Iron / ferritin / B12 studies', 'Diagnostic CT / MRI / PET imaging', 'Image-guided tissue biopsy'],
+    questionsToAsk: [
+      'Are my blood counts or imaging findings benign, or is a biopsy needed to be certain?',
+      'What age-appropriate preventive screenings should I keep up with?',
+      'What targeted, minimally invasive, or supportive options are available?'
+    ],
+    icon: 'ShieldCheck'
+  },
+  {
+    id: 'nephrologist',
+    name: 'Nephrologist',
+    title: 'Kidney Health & Blood Pressure Specialist',
+    category: 'Nephrology (Kidney Care)',
+    description: 'Focuses on preserving kidney filtering function, managing chronic kidney disease, evaluating protein in urine, and treating complex high blood pressure.',
+    commonSymptoms: ['Swelling in feet, ankles, or around eyes', 'Foamy or bubbly urine', 'Elevated blood creatinine / low eGFR', 'Hard-to-control high blood pressure', 'Fatigue with kidney lab changes'],
+    sampleConditions: ['Chronic Kidney Disease (CKD)', 'Diabetic kidney protection', 'Proteinuria / Glomerulonephritis', 'Resistant hypertension', 'Recurrent kidney stone prevention'],
+    whenToConsult: 'Consult if routine labs show reduced eGFR, persistent protein in the urine, or swelling paired with blood pressure changes.',
+    typicalTests: ['Serum creatinine & eGFR calculation', 'Urine Albumin-to-Creatinine Ratio (uACR)', 'Electrolyte panel (potassium, bicarbonate)', 'Renal Doppler ultrasound'],
+    questionsToAsk: [
+      'What is my current eGFR stage and how can I protect my remaining kidney function?',
+      'Which pain relievers (like NSAIDs) should I strictly avoid?',
+      'Would kidney-protective medications or specific fluid/salt limits help?'
+    ],
+    icon: 'Activity'
   }
 ];
 
 export function findSpecialistForKeywords(text: string): MedicalSpecialist {
   const lower = text.toLowerCase();
-  
-  if (/ear|nose|throat|sinus|tonsil|voice|hoarse|swallow|snore/i.test(lower)) {
+
+  if (/eye|vision|blurry|pink eye|conjunctiv|cataract|glaucoma|cornea|ophthalm/i.test(lower)) {
+    return MEDICAL_SPECIALISTS.find(s => s.id === 'ophthalmologist')!;
+  }
+  if (/uti|urinar|bladder|kidney stone|flank pain|prostat|burning urine|hematuria|urolog/i.test(lower)) {
+    return MEDICAL_SPECIALISTS.find(s => s.id === 'urologist')!;
+  }
+  if (/kidney disease|ckd|creatinine|egfr|proteinuria|dialysis|nephro/i.test(lower)) {
+    return MEDICAL_SPECIALISTS.find(s => s.id === 'nephrologist')!;
+  }
+  if (/pcos|period|menstru|pelvic pain|ovary|uter|pregnan|endometri|gynecol|vaginal/i.test(lower)) {
+    return MEDICAL_SPECIALISTS.find(s => s.id === 'gynecologist')!;
+  }
+  if (/child|infant|baby|toddler|pediatric|measles|chickenpox|croup/i.test(lower)) {
+    return MEDICAL_SPECIALISTS.find(s => s.id === 'pediatrician')!;
+  }
+  if (/anxiety|panic|insomnia|sleep disorder|depress|stress|mental health|psychiatr/i.test(lower)) {
+    return MEDICAL_SPECIALISTS.find(s => s.id === 'psychiatrist')!;
+  }
+  if (/gout|rheumatoid|lupus|autoimmune|morning stiffness|rheumatol/i.test(lower)) {
+    return MEDICAL_SPECIALISTS.find(s => s.id === 'rheumatologist')!;
+  }
+  if (/anemia|iron deficien|hemoglobin|cancer|tumor|oncolog|hematol|biopsy|lump/i.test(lower)) {
+    return MEDICAL_SPECIALISTS.find(s => s.id === 'oncologist')!;
+  }
+  if (/thyroid|hypothyroid|hyperthyroid|diabetes|insulin|hormone|endocrin|a1c/i.test(lower)) {
+    return MEDICAL_SPECIALISTS.find(s => s.id === 'endocrinologist')!;
+  }
+  if (/dengue|malaria|typhoid|tuberculosis|mpox|smallpox|shingles|infectious|parasit/i.test(lower)) {
+    return MEDICAL_SPECIALISTS.find(s => s.id === 'infectious_disease')!;
+  }
+  if (/ear|nose|throat|sinus|tonsil|voice|hoarse|swallow|snore|otitis|vertigo|bppv/i.test(lower)) {
     return MEDICAL_SPECIALISTS.find(s => s.id === 'ent_specialist')!;
   }
-  if (/cough|phlegm|wheez|breath|lung|bronch/i.test(lower)) {
+  if (/cough|phlegm|wheez|breath|lung|bronch|asthma|pneumonia|pulmon/i.test(lower)) {
     return MEDICAL_SPECIALISTS.find(s => s.id === 'pulmonologist')!;
   }
-  if (/stomach|digest|acid|reflux|heartburn|nausea|vomit|diarrhea|constipat|gut|bowel|cramp/i.test(lower)) {
+  if (/stomach|digest|acid|reflux|heartburn|nausea|vomit|diarrhea|constipat|gut|bowel|cramp|hemorrhoid|piles|ulcer|gallstone|hepatitis|appendic|ibs|gastro/i.test(lower)) {
     return MEDICAL_SPECIALISTS.find(s => s.id === 'gastroenterologist')!;
   }
-  if (/headache|migraine|tingl|numb|dizz|vertigo|nerve|seiz/i.test(lower)) {
+  if (/headache|migraine|tingl|numb|dizz|nerve|seiz|sciatica|neuro/i.test(lower)) {
     return MEDICAL_SPECIALISTS.find(s => s.id === 'neurologist')!;
   }
-  if (/skin|rash|itch|hive|acne|mole|eczema|scab|scalp/i.test(lower)) {
+  if (/skin|rash|itch|hive|urticaria|acne|mole|eczema|psoriasis|fungal|ringworm|scab|scalp|derma/i.test(lower)) {
     return MEDICAL_SPECIALISTS.find(s => s.id === 'dermatologist')!;
   }
-  if (/heart|palpitat|chest tight|blood pressure|pulse|cardio/i.test(lower)) {
+  if (/heart|palpitat|chest tight|blood pressure|hypertension|pulse|cardio/i.test(lower)) {
     return MEDICAL_SPECIALISTS.find(s => s.id === 'cardiologist')!;
   }
-  if (/joint|knee|bone|shoulder|back pain|spine|muscle strain|sprain/i.test(lower)) {
+  if (/joint|knee|bone|shoulder|back pain|spine|muscle strain|sprain|osteoarthritis|orthoped/i.test(lower)) {
     return MEDICAL_SPECIALISTS.find(s => s.id === 'orthopedist')!;
   }
 

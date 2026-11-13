@@ -9,10 +9,12 @@ import { DiseaseExplorerView } from './components/DiseaseExplorer/DiseaseExplore
 export default function App() {
   const [currentTab, setCurrentTab] = useState<TabKey>('chat');
   const [chatInitialQuery, setChatInitialQuery] = useState<string | undefined>(undefined);
+  const [selectedSpecialistId, setSelectedSpecialistId] = useState<string | undefined>(undefined);
   const [resetTrigger, setResetTrigger] = useState<number>(0);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleNavigateToSpecialist = (specialistId?: string) => {
+    setSelectedSpecialistId(specialistId);
     setCurrentTab('specialists');
   };
 
@@ -61,7 +63,10 @@ export default function App() {
               />
             )}
             {currentTab === 'specialists' && (
-              <SpecialistDirectoryView onSelectForChat={handleSelectForChat} />
+              <SpecialistDirectoryView
+                onSelectForChat={handleSelectForChat}
+                initialSpecialistId={selectedSpecialistId}
+              />
             )}
             {currentTab === 'knowledge' && (
               <DiseaseExplorerView onSelectForChat={handleSelectForChat} />

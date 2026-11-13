@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Stethoscope,
   Search,
@@ -12,20 +12,43 @@ import {
   CheckCircle2,
   HelpCircle,
   ArrowRight,
-  ClipboardList
+  ClipboardList,
+  Eye,
+  Droplets,
+  Baby,
+  HeartHandshake,
+  Microscope,
+  Flame,
+  ShieldCheck
 } from 'lucide-react';
 import { MEDICAL_SPECIALISTS, MedicalSpecialist } from '../../data/medicalKnowledge';
 
 interface SpecialistDirectoryViewProps {
   onSelectForChat?: (query: string) => void;
+  initialSpecialistId?: string;
 }
 
-export const SpecialistDirectoryView: React.FC<SpecialistDirectoryViewProps> = ({ onSelectForChat }) => {
+export const SpecialistDirectoryView: React.FC<SpecialistDirectoryViewProps> = ({
+  onSelectForChat,
+  initialSpecialistId
+}) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
-  const [activeSpecialistId, setActiveSpecialistId] = useState<string>(MEDICAL_SPECIALISTS[0].id);
+  const [activeSpecialistId, setActiveSpecialistId] = useState<string>(
+    initialSpecialistId && MEDICAL_SPECIALISTS.some(s => s.id === initialSpecialistId)
+      ? initialSpecialistId
+      : MEDICAL_SPECIALISTS[0].id
+  );
 
-  const categories = ['All', 'Primary Care', 'Surgical & Medical Head/Neck', 'Pulmonary Medicine', 'Gastrointestinal Medicine', 'Neurosciences', 'Dermatology', 'Cardiology', 'Orthopedics & Sports Medicine'];
+  useEffect(() => {
+    if (initialSpecialistId && MEDICAL_SPECIALISTS.some(s => s.id === initialSpecialistId)) {
+      setActiveSpecialistId(initialSpecialistId);
+      setSelectedCategory('All');
+      setSearchQuery('');
+    }
+  }, [initialSpecialistId]);
+
+  const categories = ['All', ...Array.from(new Set(MEDICAL_SPECIALISTS.map(s => s.category)))];
 
   const filteredSpecialists = MEDICAL_SPECIALISTS.filter(spec => {
     const matchesSearch =
@@ -60,6 +83,26 @@ export const SpecialistDirectoryView: React.FC<SpecialistDirectoryViewProps> = (
         return <Heart className="w-5 h-5 text-red-500" />;
       case 'orthopedist':
         return <Bone className="w-5 h-5 text-orange-600" />;
+      case 'endocrinologist':
+        return <Flame className="w-5 h-5 text-amber-500" />;
+      case 'infectious_disease':
+        return <ShieldCheck className="w-5 h-5 text-emerald-600" />;
+      case 'ophthalmologist':
+        return <Eye className="w-5 h-5 text-cyan-600" />;
+      case 'urologist':
+        return <Droplets className="w-5 h-5 text-blue-600" />;
+      case 'gynecologist':
+        return <HeartHandshake className="w-5 h-5 text-pink-600" />;
+      case 'pediatrician':
+        return <Baby className="w-5 h-5 text-sky-500" />;
+      case 'psychiatrist':
+        return <Brain className="w-5 h-5 text-purple-600" />;
+      case 'rheumatologist':
+        return <Activity className="w-5 h-5 text-orange-500" />;
+      case 'oncologist':
+        return <Microscope className="w-5 h-5 text-violet-600" />;
+      case 'nephrologist':
+        return <Droplets className="w-5 h-5 text-teal-700" />;
       default:
         return <Stethoscope className="w-5 h-5 text-teal-600" />;
     }
@@ -75,7 +118,9 @@ export const SpecialistDirectoryView: React.FC<SpecialistDirectoryViewProps> = (
               <Stethoscope className="w-3.5 h-3.5" />
               <span>Medical Specialist Referral Guide</span>
             </div>
-            <h2 className="text-xl font-bold text-slate-900">Which Doctor Should You See?</h2>
+            <h2 className="text-xl font-bold text-slate-900">
+              Which Doctor Should You See? ({MEDICAL_SPECIALISTS.length} Specialties)
+            </h2>
             <p className="text-xs text-slate-500 mt-0.5">
               Search by symptom or condition to find the right medical specialist, diagnostic tests to expect, and questions to ask.
             </p>
@@ -87,7 +132,7 @@ export const SpecialistDirectoryView: React.FC<SpecialistDirectoryViewProps> = (
               type="text"
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              placeholder="Search symptom (e.g. sore throat, headache, rash)..."
+              placeholder="Search symptom (e.g. eye, kidney, PCOS, rash)..."
               className="w-full bg-white border border-slate-300 rounded-xl pl-9 pr-4 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition"
             />
           </div>
@@ -106,7 +151,7 @@ export const SpecialistDirectoryView: React.FC<SpecialistDirectoryViewProps> = (
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
-              {cat === 'All' ? 'All Specialists' : cat.split(' ')[0]}
+              {cat === 'All' ? 'All Specialists' : cat}
             </button>
           ))}
         </div>
@@ -115,7 +160,7 @@ export const SpecialistDirectoryView: React.FC<SpecialistDirectoryViewProps> = (
       {/* Main Grid: List on Left, Comprehensive Details on Right */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
         {/* Left column: Specialist list */}
-        <div className="lg:col-span-5 space-y-2.5">
+        <div className="lg:col-span-5 space-y-2.5 max-h-[720px] overflow-y-auto pr-1">
           {filteredSpecialists.length === 0 ? (
             <div className="bg-white border border-slate-200 rounded-2xl p-6 text-center text-xs text-slate-400">
               No specialists match "{searchQuery}". Try searching for generic terms like cough, fever, stomach, or joint.
