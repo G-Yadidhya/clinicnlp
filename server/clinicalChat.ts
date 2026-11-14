@@ -15,14 +15,19 @@ export interface ClinicalChatResult {
   sources: GroundedSource[];
 }
 
-const MEDICAL_SYSTEM_INSTRUCTION = `You are CliniQ, an interactive medical assistant and specialist referral guide. Your primary mission is to help users identify potential conditions from their symptoms, understand diseases clearly, clear their doubts, provide practical next steps, and recommend the right medical specialist.
+const MEDICAL_SYSTEM_INSTRUCTION = `You are CliniQ, a thoughtful, conversational clinical assistant and specialist referral guide. Your primary mission is to analyze what the user tells you, ask clarifying questions when details are limited, help identify plausible conditions when appropriate, explain medical topics clearly, and recommend the right specialist when clinical care is warranted.
 
 ### PRIMARY DIRECTIVES
 
-1. PREDICT & IDENTIFY CONDITIONS FROM SYMPTOMS:
-   - When a user describes their symptoms, clearly identify and suggest 1 to 3 plausible conditions (e.g., Migraine, Tension Headache, Seasonal Flu, Common Cold, Acid Reflux/GERD, Bronchitis, Sinusitis, Allergic Rhinitis, Dengue, etc.).
-   - Clearly explain WHY their symptoms fit these conditions, and what differentiates them.
-   - Present them as possibilities for a doctor to confirm, never an absolute diagnosis.
+0. HANDLE GREETINGS & CASUAL MESSAGES NATURALLY:
+   - If the user greets you (e.g., "hi", "hello", "hey", "good morning", "how are you"), thanks you, or asks what you can do, respond warmly and concisely in 1–3 sentences.
+   - Invite them to share any symptoms they are experiencing, a condition they want explained, or help finding the right doctor.
+   - NEVER output clinical condition templates, symptom lists, or doctor referrals for a simple greeting or casual message.
+
+1. ANALYZE FIRST — ASK CLARIFYING QUESTIONS BEFORE JUMPING TO CONCLUSIONS:
+   - If the user gives a vague or brief complaint (e.g., "I don't feel well", "I have pain", "my head hurts", "feeling sick") without enough context, DO NOT immediately jump to firm conclusions.
+   - First, briefly acknowledge their concern, mention common everyday possibilities gently, and ask 2–4 focused clarifying questions (such as how long it has lasted, severity, exact location, triggers, or accompanying symptoms like fever/nausea) so you can analyze properly.
+   - When the user provides concrete symptoms or answers your follow-up questions, analyze how the symptoms fit together and suggest 1 to 3 plausible conditions as possibilities for a clinician to confirm, never as a definitive diagnosis.
 
 2. THOROUGHLY EXPLAIN DISEASES & CLEAR MEDICAL DOUBTS:
    - When a user asks about ANY condition or disease (e.g., fever, migraine, cancer, dengue, diabetes, asthma, hypertension, arthritis, infections, etc.):
@@ -41,22 +46,54 @@ const MEDICAL_SYSTEM_INSTRUCTION = `You are CliniQ, an interactive medical assis
    - Provide comforting, actionable next steps (rest, hydration, gentle home care, monitoring timeline, questions to prepare for the doctor).
 
 5. RECOMMENDED MEDICAL SPECIALIST — ONLY WHEN RELEVANT:
-   - ONLY provide a recommended medical specialist (e.g. Neurologist, ENT Specialist, Gastroenterologist, Pulmonologist, Dermatologist, Oncologist, or GP) AFTER identifying a potential condition from relatable symptoms, or when discussing specific clinical disease management.
-   - DO NOT recommend a specialist when the user is simply clarifying a general doubt, conceptual question, or health curiosity (e.g. "What is DNA?", "How does the immune system work?", "Why do we sneeze?", "Can lack of sleep cause fatigue?"). For general doubts, answer the question clearly, concisely, and directly without tacking on unnecessary doctor referral sections.
+   - ONLY provide a recommended medical specialist (e.g. Neurologist, ENT Specialist, Gastroenterologist, Pulmonologist, Dermatologist, Oncologist, or GP) AFTER analyzing relatable symptoms or discussing clinical disease management.
+   - DO NOT recommend a specialist for greetings, casual conversation, or general conceptual/biological curiosity (e.g. "What is DNA?", "How does the immune system work?", "Why do we sneeze?").
 
 6. ZERO-HALLUCINATION & TRUTHFULNESS:
    - Ground all information in real medical science. Never invent fake cures, guaranteed remedies, or specific drug dosages.
    - If a condition is rare or symptoms are ambiguous, explain the possibilities and guide them directly to the appropriate specialist for in-person testing.
 
 7. CLEAN FORMATTING & SPACING (CRITICAL FOR READABILITY):
-   - ALWAYS format your response with clean markdown structure and generous line breaks.
-   - Use '### Section Title' for headings, with an empty line before and after.
+   - For simple greetings or short conversational replies, keep formatting natural without unnecessary headers.
+   - For detailed medical explanations, use '### Section Title' for headings, with an empty line before and after.
    - Put EVERY bullet point on its own new line (e.g. '\n* **Point:** explanation'). NEVER run bullet points together horizontally on the same line.
    - Separate different phases, steps, and paragraphs with blank lines so patients can easily read and digest the information.`;
 
 // Comprehensive offline clinical knowledge engine for zero-error resilient service
 function generateLocalClinicalKnowledge(query: string): string {
-  const lower = query.toLowerCase();
+  const lower = query.toLowerCase().trim();
+
+  // Greetings & casual openers
+  if (/^(hi+|hello+|hey+|hii+|greetings|good (morning|afternoon|evening)|how are you|what'?s up|yo)\b[!.?\s]*$/i.test(lower)) {
+    return `Hello! I'm **CliniQ**, your clinical assistant. How can I help you today?
+
+You can tell me about any symptoms you're experiencing (along with how long they've lasted), ask about a medical condition, or ask which specialist doctor to consult.`;
+  }
+
+  // Gratitude / farewells / acknowledgments
+  if (/^(thanks|thank you|thx|ok|okay|got it|cool|bye|goodbye)\b[!.?\s]*$/i.test(lower)) {
+    return `You're welcome! Let me know anytime if you'd like to share more symptoms, ask about a condition, or check which specialist to visit.`;
+  }
+
+  // Capabilities / identity
+  if (/^(who are you|what can you do|help)\b[!.?\s]*$/i.test(lower)) {
+    return `I'm **CliniQ**. I can help you:
+
+*   **Analyze symptoms** and ask follow-up questions to narrow down common possibilities
+*   **Explain medical conditions** in plain, reassuring language
+*   **Match you with the right specialist** when in-person care is helpful
+
+Tell me what symptoms or health question you have on your mind.`;
+  }
+
+  // Vague non-specific complaints — ask clarifying questions instead of jumping to conclusions
+  if (/^(i feel sick|i am sick|i'?m sick|not feeling well|i don'?t feel well|feeling unwell|something is wrong|i have pain|i'?m in pain)[!.?\s]*$/i.test(lower)) {
+    return `I'm sorry you're not feeling well. To analyze this properly instead of guessing, could you share a few quick details?
+
+*   **Main symptoms:** What feels off right now (e.g., fever, headache, body aches, nausea, cough, or localized pain)?
+*   **Duration:** When did it start, and is it getting better or worse?
+*   **Severity & triggers:** Roughly how intense is it (1–10), and does anything make it better or worse?`;
+  }
 
   // Dengue Fever
   if (/dengue|breakbone|mosquito/i.test(lower)) {
@@ -322,18 +359,20 @@ export async function answerClinicalQuestion(input: {
   triageNote?: string;
 }): Promise<ClinicalChatResult> {
   const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
+  const customModel = process.env.GEMINI_MODEL?.trim();
 
-  // Candidate models: prioritize gemini-3.5-flash and gemini-3.5-flash-lite which have active free-tier quota and deep reasoning
-  const candidateModels = [
-    'gemini-3.5-flash',
-    'gemini-3.5-flash-lite',
-    'gemini-3.6-flash',
-    'gemini-3.7-flash',
-    'gemini-3.8-flash',
-    'gemini-3.1-flash-lite'
-  ];
+  // Candidate models aligned with @google/genai supported aliases
+  const candidateModels = Array.from(
+    new Set([
+      ...(customModel ? [customModel] : []),
+      'gemini-4-hydrogen',
+      'gemini-3.1-flash-lite'
+    ])
+  );
 
-  if (apiKey) {
+  if (!apiKey) {
+    console.warn('[CliniQ] GEMINI_API_KEY is not set; using offline fallback response.');
+  } else {
     try {
       const ai = new GoogleGenAI({ apiKey });
       const history = input.history.slice(-8).map(turn => ({
@@ -365,7 +404,7 @@ export async function answerClinicalQuestion(input: {
 
           if (response && 'text' in response && response.text) {
             const answer = response.text.trim();
-            if (answer.length > 20) {
+            if (answer.length > 0) {
               const sources: GroundedSource[] = [
                 { title: 'NIH: National Institutes of Health', url: 'https://www.nih.gov' },
                 { title: 'CDC: Centers for Disease Control & Prevention', url: 'https://www.cdc.gov' },
@@ -373,13 +412,17 @@ export async function answerClinicalQuestion(input: {
               ];
               return { answer, sources };
             }
+          } else if (response === null) {
+            console.warn(`[CliniQ] Model "${modelName}" timed out after 20s.`);
           }
-        } catch {
-          // Silently continue to next candidate model without logging alarm messages
+        } catch (err) {
+          const reason = err instanceof Error ? err.message : String(err);
+          console.warn(`[CliniQ] Model "${modelName}" failed (${reason}); trying next fallback.`);
         }
       }
-    } catch {
-      // Fallback silently
+    } catch (err) {
+      const reason = err instanceof Error ? err.message : String(err);
+      console.warn(`[CliniQ] Gemini client initialization failed (${reason}); using offline fallback.`);
     }
   }
 

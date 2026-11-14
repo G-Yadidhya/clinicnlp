@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { answerClinicalQuestion } from './server/clinicalChat.ts';
@@ -6,6 +7,29 @@ import type { ChatTurn } from './server/clinicalChat.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Load .env.local and .env automatically for local runs (without overriding existing shell env vars)
+for (const envFile of ['.env.local', '.env']) {
+  const envPath = path.resolve(__dirname, envFile);
+  if (fs.existsSync(envPath)) {
+    const content = fs.readFileSync(envPath, 'utf8');
+    for (const rawLine of content.split(/\r?\n/)) {
+      const line = rawLine.trim();
+      if (!line || line.startsWith('#')) continue;
+      const eqIndex = line.indexOf('=');
+      if (eqIndex <= 0) continue;
+      const key = line.slice(0, eqIndex).trim();
+      let value = line.slice(eqIndex + 1).trim();
+      if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+        value = value.slice(1, -1);
+      }
+      if (!process.env[key]) {
+        process.env[key] = value;
+      }
+    }
+  }
+}
+
 const isProduction = process.env.NODE_ENV === 'production';
 const port = Number(process.env.PORT || 3000);
 
@@ -95,7 +119,13 @@ async function startServer() {
   }
 
   app.listen(port, '0.0.0.0', () => {
-    console.log(`CliniQ full-stack server running on http://0.0.0.0:${port}`);
+    const hasKey = Boolean(process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY);
+    console.log(`CliniQ full-stack server running on http://localhost:${port}`);
+    console.log(
+      hasKey
+        ? 'Gemini API key detected: live AI clinical chat is enabled.'
+        : 'Warning: GEMINI_API_KEY is not set. Chat will use the offline fallback until GEMINI_API_KEY is configured in .env or your environment.'
+    );
   });
 }
 

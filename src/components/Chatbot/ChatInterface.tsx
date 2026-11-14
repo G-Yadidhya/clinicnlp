@@ -58,7 +58,7 @@ function shouldRecommendSpecialist(userText: string, botResponseText?: string): 
   const botLower = (botResponseText || '').toLowerCase();
 
   // Pure conceptual, biological, or casual inquiries without personal symptoms
-  const isPureGeneralDoubt = /^(what is (dna|a virus|an antibody|a cell|metabolism|homeostasis|immunity|blood pressure)|how does (the immune system|the heart pump|digestion work|breathing work)|why do (we|people) (sneeze|yawn|dream|blink|get goosebumps|shiver)|can you explain|tell me about how|is it normal to|thanks|thank you|hi|hello|hey|good morning|who are you)\b/i.test(lower);
+  const isPureGeneralDoubt = /^(what is (dna|a virus|an antibody|a cell|metabolism|homeostasis|immunity|blood pressure)|how does (the immune system|the heart pump|digestion work|breathing work)|why do (we|people) (sneeze|yawn|dream|blink|get goosebumps|shiver)|can you explain|tell me about how|is it normal to|thanks|thank you|thx|hi+|hello+|hey+|hii+|greetings|good (morning|afternoon|evening)|how are you|who are you|what can you do|ok|okay|bye|goodbye)\b/i.test(lower);
   if (isPureGeneralDoubt) {
     return false;
   }
