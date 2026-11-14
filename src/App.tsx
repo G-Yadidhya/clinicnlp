@@ -61,7 +61,7 @@ export default function App() {
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col min-w-0">
           <main className="flex-1">
-            <div className={currentTab === 'chat' ? 'block' : 'hidden'}>
+            <div className={currentTab === 'chat' ? 'block animate-tab-enter' : 'hidden'}>
               <ChatInterface
                 onNavigateToSpecialist={handleNavigateToSpecialist}
                 initialQuery={chatInitialQuery}
@@ -70,13 +70,17 @@ export default function App() {
               />
             </div>
             {currentTab === 'specialists' && (
-              <SpecialistDirectoryView
-                onSelectForChat={handleSelectForChat}
-                initialSpecialistId={selectedSpecialistId}
-              />
+              <div key="specialists" className="animate-tab-enter">
+                <SpecialistDirectoryView
+                  onSelectForChat={handleSelectForChat}
+                  initialSpecialistId={selectedSpecialistId}
+                />
+              </div>
             )}
             {currentTab === 'knowledge' && (
-              <DiseaseExplorerView onSelectForChat={handleSelectForChat} />
+              <div key="knowledge" className="animate-tab-enter">
+                <DiseaseExplorerView onSelectForChat={handleSelectForChat} />
+              </div>
             )}
           </main>
 

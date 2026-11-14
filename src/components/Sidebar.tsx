@@ -108,17 +108,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 onSelectTab('chat');
                 if (onClose && window.innerWidth < 1024) onClose();
               }}
-              className={`w-full flex items-center justify-between px-3 py-2 rounded-xl font-medium transition ${
+              className={`group w-full flex items-center justify-between px-3 py-2 rounded-xl font-medium transition-all duration-150 ${
                 currentTab === 'chat'
                   ? 'bg-teal-50 text-teal-800 font-semibold'
-                  : 'text-slate-600 hover:bg-slate-100'
+                  : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
               }`}
             >
               <div className="flex items-center gap-2.5">
-                <MessageSquare className={`w-4 h-4 ${currentTab === 'chat' ? 'text-teal-600' : 'text-slate-400'}`} />
+                <MessageSquare className={`w-4 h-4 transition-colors ${currentTab === 'chat' ? 'text-teal-600' : 'text-slate-400 group-hover:text-slate-600'}`} />
                 <span>Symptom Chat</span>
               </div>
-              <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+              <ChevronRight className={`w-3.5 h-3.5 transition-transform duration-150 group-hover:translate-x-0.5 ${currentTab === 'chat' ? 'text-teal-600' : 'text-slate-400'}`} />
             </button>
 
             <button
@@ -126,17 +126,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 onSelectTab('specialists');
                 if (onClose && window.innerWidth < 1024) onClose();
               }}
-              className={`w-full flex items-center justify-between px-3 py-2 rounded-xl font-medium transition ${
+              className={`group w-full flex items-center justify-between px-3 py-2 rounded-xl font-medium transition-all duration-150 ${
                 currentTab === 'specialists'
                   ? 'bg-teal-50 text-teal-800 font-semibold'
-                  : 'text-slate-600 hover:bg-slate-100'
+                  : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
               }`}
             >
               <div className="flex items-center gap-2.5">
-                <Stethoscope className={`w-4 h-4 ${currentTab === 'specialists' ? 'text-teal-600' : 'text-slate-400'}`} />
+                <Stethoscope className={`w-4 h-4 transition-colors ${currentTab === 'specialists' ? 'text-teal-600' : 'text-slate-400 group-hover:text-slate-600'}`} />
                 <span>Doctor Directory ({MEDICAL_SPECIALISTS.length} Specialties)</span>
               </div>
-              <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+              <ChevronRight className={`w-3.5 h-3.5 transition-transform duration-150 group-hover:translate-x-0.5 ${currentTab === 'specialists' ? 'text-teal-600' : 'text-slate-400'}`} />
             </button>
 
             <button
@@ -144,17 +144,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 onSelectTab('knowledge');
                 if (onClose && window.innerWidth < 1024) onClose();
               }}
-              className={`w-full flex items-center justify-between px-3 py-2 rounded-xl font-medium transition ${
+              className={`group w-full flex items-center justify-between px-3 py-2 rounded-xl font-medium transition-all duration-150 ${
                 currentTab === 'knowledge'
                   ? 'bg-teal-50 text-teal-800 font-semibold'
-                  : 'text-slate-600 hover:bg-slate-100'
+                  : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
               }`}
             >
               <div className="flex items-center gap-2.5">
-                <BookOpen className={`w-4 h-4 ${currentTab === 'knowledge' ? 'text-teal-600' : 'text-slate-400'}`} />
+                <BookOpen className={`w-4 h-4 transition-colors ${currentTab === 'knowledge' ? 'text-teal-600' : 'text-slate-400 group-hover:text-slate-600'}`} />
                 <span>Disease Library ({CLINICAL_DISEASE_DB.length} Conditions)</span>
               </div>
-              <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+              <ChevronRight className={`w-3.5 h-3.5 transition-transform duration-150 group-hover:translate-x-0.5 ${currentTab === 'knowledge' ? 'text-teal-600' : 'text-slate-400'}`} />
             </button>
           </div>
 

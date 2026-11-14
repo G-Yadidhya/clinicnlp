@@ -29,14 +29,20 @@ export const Navigation: React.FC<NavigationProps> = ({ currentTab, onSelectTab 
               key={tab.id}
               onClick={() => onSelectTab(tab.id)}
               aria-current={isActive ? 'page' : undefined}
-              className={`flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-medium border-b-2 transition-colors whitespace-nowrap shrink-0 ${
+              className={`relative flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-medium rounded-t-lg transition-all duration-200 whitespace-nowrap shrink-0 active:scale-[0.98] ${
                 isActive
-                  ? 'border-teal-600 text-teal-700 font-semibold'
-                  : 'border-transparent text-slate-500 hover:text-slate-800'
+                  ? 'text-teal-700 font-semibold bg-teal-50/50'
+                  : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
               }`}
             >
-              <Icon className="w-3.5 h-3.5" />
+              <Icon className={`w-3.5 h-3.5 transition-colors duration-200 ${isActive ? 'text-teal-600' : ''}`} />
               <span>{tab.shortLabel}</span>
+              <span
+                aria-hidden="true"
+                className={`absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-teal-600 transition-transform duration-200 ease-out origin-center ${
+                  isActive ? 'scale-x-100' : 'scale-x-0'
+                }`}
+              />
             </button>
           );
         })}
