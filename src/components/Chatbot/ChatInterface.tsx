@@ -38,6 +38,7 @@ interface Message {
 interface ChatInterfaceProps {
   onNavigateToSpecialist?: (specialistId?: string) => void;
   initialQuery?: string;
+  onInitialQueryConsumed?: () => void;
   resetTrigger?: number;
 }
 
@@ -167,11 +168,11 @@ function parseResponseToBlocks(rawText: string): ParsedBlock[] {
   let text = rawText;
 
   // 1. Separate inline bullets (e.g. "body aches. * **Critical Phase:**" or "Typical Progression * **Febrile Phase:**")
-  text = text.replace(/([^\n])\s+([*•\-–]|\d+\.)\s+(\*\*|[A-Z])/g, '$1\n$2 $3');
-  text = text.replace(/([.:!?])\s+([*•\-–])\s+/g, '$1\n$2 ');
+  text = text.replace(/([^\n])\s+([+*•\-–]|\d+\.)\s+(\*\*|[A-Z])/g, '$1\n$2 $3');
+  text = text.replace(/([.:!?])\s+([+*•\-–])\s+/g, '$1\n$2 ');
 
-  // 2. Separate questions into their own heading block
-  text = text.replace(/([^\n#]+?\?)\s*([*•\-–]|\b[A-Z])/g, '\n### $1\n$2');
+  // 2. Separate standalone inline questions (not inside **bold** or bullet lines) into headings
+  text = text.replace(/(^|\n)([^\n#*•\-–+][^\n]{4,90}?\?)\s+(?=[+*•\-–]|\b[A-Z])/g, '$1\n### $2\n');
 
   // 3. Separate common section titles that often get squashed into text
   const sectionKeywords = [
@@ -190,9 +191,9 @@ function parseResponseToBlocks(rawText: string): ParsedBlock[] {
   ];
 
   for (const header of sectionKeywords) {
-    const regex = new RegExp(`(^|\\n|\\.\\s+)(#*\\s*${header}[^\\n\\?\\.:]*[:\\?]?)\\s*([*•\\-–\\w])`, 'gi');
+    const regex = new RegExp(`(^|\\n|\\.\\s+)(#*\\s*\\*{0,2}${header}[^\\n\\?\\.:]*\\*{0,2}[:\\?]?)\\s+([+*•\\-–\\w])`, 'gi');
     text = text.replace(regex, (m, p1, p2, p3) => {
-      const cleanH = p2.replace(/^#+\s*/, '').trim();
+      const cleanH = p2.replace(/^#+\s*/, '').replace(/\*\*/g, '').trim();
       return `${p1}\n### ${cleanH}\n${p3}`;
     });
   }
@@ -209,7 +210,12 @@ function parseResponseToBlocks(rawText: string): ParsedBlock[] {
   };
 
   for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
+    let line = lines[i];
+
+    // Normalize bold-wrapped list markers like "**1. Point:**" or "**• Point:**"
+    line = line.replace(/^\*\*(\d+[.)]|[•\-–+])\s+/, '$1 **');
+    // Normalize bullet symbol with missing space before bold like "•**Point:**"
+    line = line.replace(/^•(\*\*)/, '• $1');
 
     // Horizontal separators (--- or ***)
     if (/^[-*_]{3,}$/.test(line)) {
@@ -222,30 +228,29 @@ function parseResponseToBlocks(rawText: string): ParsedBlock[] {
       flushList();
       blocks.push({
         type: 'heading',
-        headingText: line.replace(/^#{1,4}\s+/, '').trim()
+        headingText: line.replace(/^#{1,4}\s+/, '').replace(/^\*{1,2}(.+?)\*{1,2}$/, '$1').trim()
       });
       continue;
     }
 
     // Isolated section titles ending in : or standalone
     if (
-      /^(typical progression|how is it diagnosed|how is it treated|when to see a doctor|diagnosis|treatment|prevention|causes|symptoms)\b/i.test(line) &&
-      line.length < 50 &&
-      !line.startsWith('*') &&
-      !line.startsWith('-')
+      /^(typical progression|how is it diagnosed|how is it treated|when to see a doctor|diagnosis|treatment|prevention|causes|symptoms)\b/i.test(line.replace(/\*\*/g, '')) &&
+      line.length < 55 &&
+      !/^([+*•\-–]|\d+[.)])\s/.test(line)
     ) {
       flushList();
       blocks.push({
         type: 'heading',
-        headingText: line.replace(/[:?]$/, '').trim()
+        headingText: line.replace(/\*\*/g, '').replace(/[:?]$/, '').trim()
       });
       continue;
     }
 
-    // List item (e.g. * **Item:** or - Item or 1. Item)
-    const listMatch = line.match(/^([*•\-–]|\d+\.)\s+(.+)$/);
+    // List item (e.g. * **Item:** or - Item or + Item or • Item or 1. Item)
+    const listMatch = line.match(/^(?:[+*•\-–]|\d+[.)])\s+(.+)$/);
     if (listMatch) {
-      currentList.push(listMatch[2]);
+      currentList.push(listMatch[1]);
       continue;
     }
 
@@ -282,7 +287,7 @@ function renderFormattedMessage(text: string): React.ReactNode {
             <div key={bIdx} className="pt-2 pb-1 border-b border-teal-100/90 mb-1">
               <h4 className="text-sm font-bold text-teal-900 flex items-center gap-2">
                 <span className="w-1.5 h-3.5 bg-teal-600 rounded-full inline-block" />
-                <span>{block.headingText}</span>
+                <span>{parseInlineBold(block.headingText || '')}</span>
               </h4>
             </div>
           );
@@ -327,9 +332,27 @@ function renderFormattedMessage(text: string): React.ReactNode {
 }
 
 function parseInlineBold(text: string): React.ReactNode {
-  // Support bold (**text**), italics (*text*), and inline code (`code`)
-  const parts = text.split(/(\*\*.*?\*\*|\*[^*]+?\*|`[^`]+?`)/g);
+  // Repair odd/unclosed ** markers (e.g., "**Label: description" -> "**Label:** description", or strip stray **)
+  let normalized = text;
+  const boldMarkerCount = (normalized.match(/\*\*/g) || []).length;
+  if (boldMarkerCount % 2 !== 0) {
+    if (/^\*\*[^*\n]{1,60}:/.test(normalized) && !/\*\*/.test(normalized.slice(2))) {
+      normalized = normalized.replace(/^(\*\*[^*\n]{1,60}:)/, '$1**');
+    } else {
+      normalized = normalized.replace(/\*\*/g, '');
+    }
+  }
+
+  // Support bold+italic (***text***), bold (**text**), italics (*text*), and inline code (`code`)
+  const parts = normalized.split(/(\*\*\*[^*]+?\*\*\*|\*\*.*?\*\*|\*[^*]+?\*|`[^`]+?`)/g);
   return parts.map((part, idx) => {
+    if (part.startsWith('***') && part.endsWith('***') && part.length >= 6) {
+      return (
+        <strong key={idx} className="font-semibold italic text-teal-950">
+          {part.slice(3, -3)}
+        </strong>
+      );
+    }
     if (part.startsWith('**') && part.endsWith('**') && part.length >= 4) {
       return (
         <strong key={idx} className="font-semibold text-teal-950">
@@ -358,6 +381,7 @@ function parseInlineBold(text: string): React.ReactNode {
 export const ChatInterface: React.FC<ChatInterfaceProps> = ({
   onNavigateToSpecialist,
   initialQuery,
+  onInitialQueryConsumed,
   resetTrigger
 }) => {
   const [messages, setMessages] = useState<Message[]>([
@@ -482,6 +506,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
   useEffect(() => {
     if (initialQuery) {
       handleSendMessage(initialQuery);
+      onInitialQueryConsumed?.();
     }
   }, [initialQuery]);
 

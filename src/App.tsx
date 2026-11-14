@@ -55,13 +55,14 @@ export default function App() {
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col min-w-0">
           <main className="flex-1">
-            {currentTab === 'chat' && (
+            <div className={currentTab === 'chat' ? 'block' : 'hidden'}>
               <ChatInterface
                 onNavigateToSpecialist={handleNavigateToSpecialist}
                 initialQuery={chatInitialQuery}
+                onInitialQueryConsumed={() => setChatInitialQuery(undefined)}
                 resetTrigger={resetTrigger}
               />
-            )}
+            </div>
             {currentTab === 'specialists' && (
               <SpecialistDirectoryView
                 onSelectForChat={handleSelectForChat}
