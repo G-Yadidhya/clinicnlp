@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
   Send,
-  Stethoscope,
   RotateCcw,
   ShieldCheck,
   CheckCircle2,
@@ -18,6 +17,7 @@ import {
   Copy,
   Activity
 } from 'lucide-react';
+import { BrandLogo } from '../BrandLogo';
 import { findSpecialistForKeywords, MedicalSpecialist, MEDICAL_SPECIALISTS } from '../../data/medicalKnowledge';
 
 interface GroundedSource {
@@ -755,22 +755,19 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
       <section
         className={`${
           isGuidanceOpen ? 'lg:col-span-8 xl:col-span-9' : 'lg:col-span-12'
-        } flex flex-col h-[calc(100vh-12rem)] min-h-[580px] max-h-[920px] bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden transition-all duration-200`}
+        } flex flex-col h-[calc(100vh-10rem)] md:h-[calc(100vh-8.5rem)] min-h-[580px] max-h-[920px] bg-white border border-slate-200/90 rounded-2xl shadow-sm overflow-hidden transition-all duration-200`}
         aria-label="Health and symptom chat"
       >
         {/* Header */}
-        <div className="px-5 py-3.5 border-b border-slate-200 flex items-center justify-between bg-slate-50/50 shrink-0">
+        <div className="px-5 py-3.5 border-b border-slate-200/80 flex items-center justify-between bg-slate-50/40 shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-teal-600 text-white flex items-center justify-center shadow-xs">
-              <Stethoscope className="w-5 h-5" />
-            </div>
+            <BrandLogo size="md" />
             <div>
-              <h2 className="text-sm font-bold text-slate-900 leading-tight">
+              <h2 className="font-display text-sm font-bold text-slate-900 leading-tight">
                 Health & Symptom Assistant
               </h2>
-              <p className="text-[11px] text-slate-500 leading-tight flex items-center gap-1.5 mt-0.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
-                Disease Identification · Clear Doubts · Targeted Specialist Guidance
+              <p className="text-[11px] text-slate-500 leading-tight mt-0.5">
+                Symptom Analysis · Condition Explanations · Specialist Guidance
               </p>
             </div>
           </div>
@@ -778,7 +775,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
           <div className="flex items-center gap-2">
             <button
               onClick={() => setIsGuidanceOpen(prev => !prev)}
-              className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1.5 rounded-lg border transition ${
+              className={`inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg border transition whitespace-nowrap shrink-0 ${
                 isGuidanceOpen
                   ? 'border-teal-300 bg-teal-50 text-teal-800'
                   : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
@@ -787,18 +784,15 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
             >
               <UserCheck className="w-3.5 h-3.5 text-teal-600" />
               <span>{isGuidanceOpen ? 'Hide Guidance' : 'Clinical Guidance'}</span>
-              {activeSpecialist && (
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              )}
             </button>
 
             <button
               onClick={handleReset}
-              className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition"
-              title="Start new conversation"
+              className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition whitespace-nowrap shrink-0"
+              title="Clear current conversation"
             >
               <RotateCcw className="w-3.5 h-3.5" />
-              <span>New Chat</span>
+              <span>Reset</span>
             </button>
           </div>
         </div>
@@ -806,7 +800,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
         {/* Quick prompt suggestions — shown once conversation is underway */}
         {hasStartedConversation && (
           <div className="px-4 py-2 border-b border-slate-100 bg-slate-50/70 flex items-center gap-1.5 overflow-x-auto shrink-0">
-            <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider shrink-0 mr-1">
+            <span className="text-[11px] font-semibold text-slate-400 shrink-0 mr-1">
               Try asking:
             </span>
             {samplePrompts.map((p, idx) => (
@@ -829,9 +823,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
           {!hasStartedConversation && !isSending ? (
             <div className="min-h-full flex flex-col items-center">
               <div className="my-auto w-full max-w-2xl mx-auto flex flex-col items-center text-center py-2">
-                <div className="w-12 h-12 rounded-2xl bg-teal-600 text-white flex items-center justify-center shadow-sm shrink-0 mb-4">
-                  <Stethoscope className="w-6 h-6" />
-                </div>
+                <BrandLogo size="lg" className="mb-4 shadow-sm" />
 
                 <h3 className="text-lg sm:text-2xl font-bold text-slate-900 tracking-tight">
                   What symptoms or health questions can I help with today?

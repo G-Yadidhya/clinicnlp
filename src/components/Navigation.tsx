@@ -3,25 +3,25 @@ import { MessageSquare, Stethoscope, BookOpen } from 'lucide-react';
 
 export type TabKey = 'chat' | 'specialists' | 'knowledge';
 
+export const NAV_ITEMS: { id: TabKey; label: string; shortLabel: string; icon: typeof MessageSquare }[] = [
+  { id: 'chat', label: 'Symptom Chat', shortLabel: 'Chat', icon: MessageSquare },
+  { id: 'specialists', label: 'Doctor Directory', shortLabel: 'Doctors', icon: Stethoscope },
+  { id: 'knowledge', label: 'Disease Library', shortLabel: 'Diseases', icon: BookOpen }
+];
+
 interface NavigationProps {
   currentTab: TabKey;
   onSelectTab: (tab: TabKey) => void;
 }
 
 export const Navigation: React.FC<NavigationProps> = ({ currentTab, onSelectTab }) => {
-  const tabs: { id: TabKey; label: string; icon: typeof MessageSquare }[] = [
-    { id: 'chat', label: 'Health & Symptom Chat', icon: MessageSquare },
-    { id: 'specialists', label: 'Doctor & Specialist Directory', icon: Stethoscope },
-    { id: 'knowledge', label: 'Disease & Condition Library', icon: BookOpen }
-  ];
-
   return (
     <nav
-      aria-label="Main sections"
-      className="bg-white border-b border-slate-200 px-4 sm:px-6 lg:px-8"
+      aria-label="Mobile sections"
+      className="md:hidden bg-white border-t border-slate-100 px-3"
     >
-      <div className="w-full flex gap-1 overflow-x-auto">
-        {tabs.map(tab => {
+      <div className="flex items-center justify-around gap-1">
+        {NAV_ITEMS.map(tab => {
           const Icon = tab.icon;
           const isActive = currentTab === tab.id;
           return (
@@ -29,14 +29,14 @@ export const Navigation: React.FC<NavigationProps> = ({ currentTab, onSelectTab 
               key={tab.id}
               onClick={() => onSelectTab(tab.id)}
               aria-current={isActive ? 'page' : undefined}
-              className={`flex items-center gap-2 px-4 py-2.5 text-xs sm:text-sm font-semibold border-b-2 transition-colors shrink-0 ${
+              className={`flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-medium border-b-2 transition-colors whitespace-nowrap shrink-0 ${
                 isActive
-                  ? 'border-teal-600 text-teal-700'
-                  : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300'
+                  ? 'border-teal-600 text-teal-700 font-semibold'
+                  : 'border-transparent text-slate-500 hover:text-slate-800'
               }`}
             >
-              <Icon className="w-4 h-4" />
-              <span>{tab.label}</span>
+              <Icon className="w-3.5 h-3.5" />
+              <span>{tab.shortLabel}</span>
             </button>
           );
         })}

@@ -35,9 +35,15 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col">
-      {/* Pinned Top Navigation Bar - Stays fixed and never moves */}
-      <div className="sticky top-0 z-40 bg-white shadow-xs">
-        <Header onToggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
+      {/* Pinned Top Navigation Bar */}
+      <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80">
+        <Header
+          currentTab={currentTab}
+          onSelectTab={setCurrentTab}
+          onNewConsultation={handleNewConsultation}
+          onToggleSidebar={toggleSidebar}
+          isSidebarOpen={isSidebarOpen}
+        />
         <Navigation currentTab={currentTab} onSelectTab={setCurrentTab} />
       </div>
 
