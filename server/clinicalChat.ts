@@ -19,6 +19,15 @@ const MEDICAL_SYSTEM_INSTRUCTION = `You are CliniQ, a thoughtful, conversational
 
 ### PRIMARY DIRECTIVES
 
+-1. STRICT DOMAIN SCOPE (HEALTH & MEDICINE ONLY):
+   - You MUST ONLY answer:
+     1) Greetings, thanks, farewells, and questions about what CliniQ can do.
+     2) Health, medical, and clinical topics: symptoms, diseases/conditions, anatomy & human biology, medications, lab/imaging tests, mental health, sleep, nutrition, first aid, and medical specialist referrals.
+   - If the user asks about ANY unrelated/non-medical topic (such as physics/science laws like Ohm's law, sports or celebrities like MS Dhoni, coding, math, movies, politics, history, finance, or general trivia):
+     * DO NOT answer, define, or explain the off-topic subject at all—not even partially.
+     * Respond politely in 1–2 sentences stating that you are CliniQ, a health and medical assistant, and can only help with symptoms, medical conditions, health questions, and finding the right doctor. Invite them to ask a health-related question instead.
+     * NEVER attach medical specialist recommendations for off-topic questions.
+
 0. HANDLE GREETINGS & CASUAL MESSAGES NATURALLY:
    - If the user greets you (e.g., "hi", "hello", "hey", "good morning", "how are you"), thanks you, or asks what you can do, respond warmly and concisely in 1–3 sentences.
    - Invite them to share any symptoms they are experiencing, a condition they want explained, or help finding the right doctor.
@@ -331,6 +340,16 @@ Aches in the knees, back, shoulders, or joints are frequently related to postura
 Consult an **Orthopedic Specialist** or a **Physical Therapist**. For routine back or joint aches, starting with a **General Physician (GP)** is recommended.`;
   }
 
+  // Off-topic / non-medical queries in offline mode
+  const hasMedicalContext =
+    /\b(pain|ache|fever|cough|cold|flu|throat|head|chest|stomach|belly|skin|rash|itch|joint|bone|muscle|eye|ear|nose|sinus|lung|breath|heart|blood|sugar|pressure|kidney|liver|urine|uti|stone|pcos|thyroid|anemia|gout|arthritis|asthma|bronchitis|migraine|vertigo|anxiety|depression|insomnia|sleep|allergy|infection|virus|bacteria|fungal|fungus|cancer|tumor|diabetes|hypertension|hepatitis|tuberculosis|measles|chickenpox|shingles|dengue|malaria|typhoid|ulcer|appendix|appendicitis|gallstone|hemorrhoid|constipation|diarrhea|nausea|vomit|reflux|gerd|doctor|specialist|physician|symptom|disease|condition|medicine|medication|pill|tablet|dose|treatment|diagnosis|test|scan|xray|x-ray|mri|cbc|biopsy|health|medical|clinic|hospital|wellness|nutrition|diet|immune|dna|cell|vaccine|pregnancy|pregnant|period|menstrual|pediatric|child)\b/i.test(
+      lower
+    );
+
+  if (!hasMedicalContext) {
+    return `I'm **CliniQ**, a health and medical assistant, so I can only help with symptoms, medical conditions, health questions, and finding the right doctor. Feel free to ask me a health-related question anytime!`;
+  }
+
   // General Conceptual or Health Inquiries
   return `### Health Assessment & Symptom Guidance
 
@@ -352,6 +371,33 @@ Thank you for describing your health concern. Understanding symptoms early and g
 For persistent symptoms, scheduling an appointment with a **General Physician / Primary Care Doctor (GP)** is the recommended first step. If specialized diagnostics are needed, they can refer you to the appropriate specialist (such as an **ENT**, **Neurologist**, **Gastroenterologist**, or **Pulmonologist**).`;
 }
 
+const modelCooldownUntil = new Map<string, number>();
+
+function parseRetryDelayMs(reason: string): number {
+  const retrySecMatch = reason.match(/"retryDelay"\s*:\s*"(\d+)s"/i);
+  if (retrySecMatch) {
+    const seconds = Number(retrySecMatch[1]);
+    if (Number.isFinite(seconds) && seconds > 0) {
+      return Math.min(seconds * 1000, 24 * 60 * 60 * 1000);
+    }
+  }
+  if (/429|RESOURCE_EXHAUSTED|quota/i.test(reason)) {
+    return 15 * 60 * 1000;
+  }
+  return 60 * 1000;
+}
+
+function shouldAttachMedicalSources(userMessage: string, answer: string): boolean {
+  const userLower = userMessage.toLowerCase().trim();
+  const isGreetingOrMeta = /^(hi+|hello+|hey+|hii+|greetings|good (morning|afternoon|evening)|how are you|what'?s up|yo|thanks|thank you|thx|ok|okay|got it|cool|bye|goodbye|who are you|what can you do|help)\b[!.?\s]*$/i.test(userLower);
+  if (isGreetingOrMeta) return false;
+
+  const isScopeDecline = /\b(can only help with (symptoms|medical|health)|only assist with (health|medical)|outside my (medical|health) scope|focused exclusively on (health|medical)|not able to answer.*(unrelated|non-medical|off-topic))\b/i.test(answer);
+  if (isScopeDecline) return false;
+
+  return true;
+}
+
 export async function answerClinicalQuestion(input: {
   message: string;
   history: ChatTurn[];
@@ -370,9 +416,7 @@ export async function answerClinicalQuestion(input: {
     ])
   );
 
-  if (!apiKey) {
-    console.warn('[CliniQ] GEMINI_API_KEY is not set; using offline fallback response.');
-  } else {
+  if (apiKey) {
     try {
       const ai = new GoogleGenAI({ apiKey });
       const history = input.history.slice(-8).map(turn => ({
@@ -387,7 +431,13 @@ export async function answerClinicalQuestion(input: {
         .filter(Boolean)
         .join('\n\n');
 
+      const now = Date.now();
       for (const modelName of candidateModels) {
+        const cooldownExpiry = modelCooldownUntil.get(modelName);
+        if (cooldownExpiry && now < cooldownExpiry) {
+          continue;
+        }
+
         try {
           const generatePromise = ai.models.generateContent({
             model: modelName,
@@ -397,6 +447,8 @@ export async function answerClinicalQuestion(input: {
               temperature: 0.35
             }
           });
+          // Prevent unhandled rejection if a slow request rejects after timing out
+          generatePromise.catch(() => undefined);
 
           // 20 second timeout per model attempt to give ample time for complete, high-quality medical explanations
           const timeoutPromise = new Promise<null>((resolve) => setTimeout(() => resolve(null), 20000));
@@ -405,24 +457,26 @@ export async function answerClinicalQuestion(input: {
           if (response && 'text' in response && response.text) {
             const answer = response.text.trim();
             if (answer.length > 0) {
-              const sources: GroundedSource[] = [
-                { title: 'NIH: National Institutes of Health', url: 'https://www.nih.gov' },
-                { title: 'CDC: Centers for Disease Control & Prevention', url: 'https://www.cdc.gov' },
-                { title: 'Mayo Clinic: Patient Care & Health Info', url: 'https://www.mayoclinic.org' }
-              ];
+              const sources: GroundedSource[] = shouldAttachMedicalSources(input.message, answer)
+                ? [
+                    { title: 'NIH: National Institutes of Health', url: 'https://www.nih.gov' },
+                    { title: 'CDC: Centers for Disease Control & Prevention', url: 'https://www.cdc.gov' },
+                    { title: 'Mayo Clinic: Patient Care & Health Info', url: 'https://www.mayoclinic.org' }
+                  ]
+                : [];
               return { answer, sources };
             }
-          } else if (response === null) {
-            console.warn(`[CliniQ] Model "${modelName}" timed out after 20s.`);
           }
         } catch (err) {
           const reason = err instanceof Error ? err.message : String(err);
-          console.warn(`[CliniQ] Model "${modelName}" failed (${reason}); trying next fallback.`);
+          if (/429|RESOURCE_EXHAUSTED|quota|404|NOT_FOUND/i.test(reason)) {
+            const cooldownMs = parseRetryDelayMs(reason);
+            modelCooldownUntil.set(modelName, Date.now() + cooldownMs);
+          }
         }
       }
-    } catch (err) {
-      const reason = err instanceof Error ? err.message : String(err);
-      console.warn(`[CliniQ] Gemini client initialization failed (${reason}); using offline fallback.`);
+    } catch {
+      // Fall through cleanly to offline clinical knowledge base
     }
   }
 
@@ -431,11 +485,13 @@ export async function answerClinicalQuestion(input: {
   const offlineAnswer = generateLocalClinicalKnowledge(input.message);
   return {
     answer: offlineAnswer,
-    sources: [
-      { title: 'National Library of Medicine (MedlinePlus)', url: 'https://medlineplus.gov' },
-      { title: 'CDC Clinical Health Topics', url: 'https://www.cdc.gov' },
-      { title: 'Mayo Clinic Health Information', url: 'https://www.mayoclinic.org' }
-    ]
+    sources: shouldAttachMedicalSources(input.message, offlineAnswer)
+      ? [
+          { title: 'National Library of Medicine (MedlinePlus)', url: 'https://medlineplus.gov' },
+          { title: 'CDC Clinical Health Topics', url: 'https://www.cdc.gov' },
+          { title: 'Mayo Clinic Health Information', url: 'https://www.mayoclinic.org' }
+        ]
+      : []
   };
 }
 

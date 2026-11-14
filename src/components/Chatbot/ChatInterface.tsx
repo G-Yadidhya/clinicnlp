@@ -64,6 +64,11 @@ function shouldRecommendSpecialist(userText: string, botResponseText?: string): 
     return false;
   }
 
+  // Never attach a specialist card if the assistant declined an off-topic / non-medical question
+  if (/\b(can only help with (symptoms|medical|health)|only assist with (health|medical)|outside my (medical|health) scope|focused exclusively on (health|medical)|not able to answer.*(unrelated|non-medical|off-topic))\b/i.test(botLower)) {
+    return false;
+  }
+
   // Personal symptom expressions
   const hasPersonalSymptoms = /\b(i have|i've had|i am having|i'm having|i feel|i am feeling|my (head|throat|chest|stomach|knee|back|arm|leg|skin|eye|ear|nose|belly|joints?)|suffering from|experiencing|hurts|aching|swollen|pain in|started \d+|for \d+ (days?|hours?|weeks?)|since yesterday|fever of|coughing up|shortness of breath|wheezing)\b/i.test(lower);
 
